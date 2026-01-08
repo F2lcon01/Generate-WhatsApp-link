@@ -59,7 +59,6 @@
 - **Font Awesome 6** - الأيقونات
 - **Tajawal & Inter** - الخطوط
 
----
 
 
 ---
