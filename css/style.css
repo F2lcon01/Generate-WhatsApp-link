@@ -1,0 +1,849 @@
+/* ============================================
+   🎨 NEON PULSE DESIGN SYSTEM
+   WhatsApp Link Generator - Ultra Modern UI
+   ============================================ */
+
+/* ============================================
+   📦 IMPORTS & CUSTOM FONTS
+   ============================================ */
+@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap");
+
+/* ============================================
+   🎯 CSS CUSTOM PROPERTIES (DESIGN TOKENS)
+   ============================================ */
+:root {
+  /* Primary Neon Colors */
+  --neon-pink: #ff1b6b;
+  --neon-cyan: #00d4ff;
+  --neon-green: #25d366;
+  --neon-purple: #845ec2;
+  --neon-orange: #ff9800;
+  --neon-gold: #ffc75f;
+  --neon-coral: #ff6b6b;
+
+  /* WhatsApp Brand Colors */
+  --whatsapp-green: #25d366;
+  --whatsapp-dark: #128c7e;
+  --whatsapp-light: #dcf8c6;
+
+  /* Background Gradients */
+  --bg-gradient-1: linear-gradient(
+    135deg,
+    #0f0c29 0%,
+    #302b63 50%,
+    #24243e 100%
+  );
+  --bg-gradient-2: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --bg-gradient-3: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-bg-hover: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  --glass-blur: blur(20px);
+
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.8);
+  --text-muted: rgba(255, 255, 255, 0.5);
+
+  /* Spacing Scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
+  --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Font Families */
+  --font-arabic: "Tajawal", "Cairo", sans-serif;
+  --font-english: "Inter", sans-serif;
+
+  /* Z-Index Scale */
+  --z-background: -1;
+  --z-base: 1;
+  --z-card: 10;
+  --z-overlay: 100;
+  --z-modal: 1000;
+}
+
+/* ============================================
+   🔄 CSS RESET & BASE STYLES
+   ============================================ */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-arabic);
+  background: var(--bg-gradient-1);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  direction: rtl;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   🌌 ANIMATED BACKGROUND
+   ============================================ */
+.background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-background);
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    #0f0c29 0%,
+    #1a1a2e 25%,
+    #16213e 50%,
+    #0f3460 75%,
+    #1a1a2e 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+/* Animated Gradient Orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.6;
+  animation: float 20s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--neon-purple), transparent 70%);
+  top: -200px;
+  right: -200px;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--neon-pink), transparent 70%);
+  bottom: -150px;
+  left: -150px;
+  animation-delay: -5s;
+}
+
+.orb-3 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--neon-cyan), transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: -10s;
+}
+
+.orb-4 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, var(--neon-green), transparent 70%);
+  bottom: 20%;
+  right: 20%;
+  animation-delay: -7s;
+}
+
+/* Particle Canvas */
+#particles-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ============================================
+   📦 MAIN CONTAINER
+   ============================================ */
+.app-container {
+  position: relative;
+  z-index: var(--z-base);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: var(--space-xl);
+  padding-top: var(--space-3xl);
+}
+
+/* ============================================
+   🏷️ HEADER & LOGO
+   ============================================ */
+.header {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+  animation: slideDown 0.8s ease-out;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.logo-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--neon-green), var(--whatsapp-dark));
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  box-shadow: 0 0 30px rgba(37, 211, 102, 0.5), 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: pulse 2s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.logo-icon::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 70%
+  );
+  animation: shine 3s ease-in-out infinite;
+}
+
+.main-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  background: linear-gradient(
+    135deg,
+    var(--neon-green),
+    var(--neon-cyan),
+    var(--neon-purple)
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientText 3s ease infinite;
+  text-shadow: 0 0 40px rgba(37, 211, 102, 0.3);
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-top: var(--space-sm);
+}
+
+/* ============================================
+   💎 GLASS CARD
+   ============================================ */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  width: 100%;
+  max-width: 500px;
+  box-shadow: var(--glass-shadow);
+  animation: scaleIn 0.6s ease-out 0.3s both;
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+}
+
+.glass-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    transparent 50%,
+    rgba(255, 255, 255, 0.05)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ============================================
+   📝 INPUT FIELD
+   ============================================ */
+.input-wrapper {
+  position: relative;
+  margin-bottom: var(--space-lg);
+}
+
+.input-field {
+  width: 100%;
+  padding: var(--space-lg) var(--space-xl);
+  padding-right: 3.5rem;
+  font-size: 1.1rem;
+  font-family: var(--font-arabic);
+  color: var(--text-primary);
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: all var(--transition-normal);
+  text-align: center;
+  direction: ltr;
+}
+
+.input-field::placeholder {
+  color: var(--text-muted);
+  direction: rtl;
+}
+
+.input-field:focus {
+  border-color: var(--neon-green);
+  box-shadow: 0 0 0 4px rgba(37, 211, 102, 0.2),
+    0 0 20px rgba(37, 211, 102, 0.3);
+}
+
+.input-icon {
+  position: absolute;
+  right: var(--space-lg);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  transition: all var(--transition-normal);
+  pointer-events: none;
+}
+
+.input-field:focus + .input-icon {
+  color: var(--neon-green);
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Animated Input Border */
+.input-border-animation {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
+  transition: width var(--transition-normal);
+  border-radius: var(--radius-full);
+}
+
+.input-field:focus ~ .input-border-animation {
+  width: 100%;
+}
+
+/* ============================================
+   🔘 BUTTONS
+   ============================================ */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.btn {
+  flex: 1;
+  min-width: 140px;
+  padding: var(--space-md) var(--space-lg);
+  font-size: 1rem;
+  font-family: var(--font-arabic);
+  font-weight: 600;
+  color: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  text-decoration: none;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left var(--transition-slow);
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* Primary Button (Generate) */
+.btn-primary {
+  background: linear-gradient(135deg, var(--neon-green), var(--whatsapp-dark));
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Secondary Button (Clear) */
+.btn-secondary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Tertiary Button (Share) */
+.btn-tertiary {
+  background: linear-gradient(135deg, var(--neon-pink), var(--neon-coral));
+  box-shadow: 0 4px 15px rgba(255, 27, 107, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-tertiary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 27, 107, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Lookup Button */
+.btn-lookup {
+  background: linear-gradient(135deg, var(--neon-cyan), #0077b6);
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-lookup:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 212, 255, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Secondary Button Group */
+.button-group-secondary {
+  margin-top: calc(var(--space-md) * -0.5);
+}
+
+.button-group-secondary .btn {
+  flex: 1;
+  min-width: 100px;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.9rem;
+}
+
+/* Icon Buttons */
+.btn i {
+  font-size: 1.1rem;
+  transition: transform var(--transition-normal);
+}
+
+.btn:hover i {
+  transform: scale(1.15);
+}
+
+/* ============================================
+   📊 RESULT AREA
+   ============================================ */
+.result-container {
+  min-height: 60px;
+  margin-bottom: var(--space-lg);
+  padding: var(--space-md);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--glass-border);
+  transition: all var(--transition-normal);
+}
+
+.result-container.has-result {
+  border-style: solid;
+  border-color: var(--neon-green);
+  background: rgba(37, 211, 102, 0.1);
+}
+
+.result-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  color: var(--neon-green);
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-normal);
+  word-break: break-all;
+}
+
+.result-link:hover {
+  background: rgba(37, 211, 102, 0.2);
+  transform: scale(1.02);
+}
+
+.result-link i {
+  font-size: 1.5rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Error Message */
+.error-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  color: var(--neon-coral);
+  font-weight: 500;
+  padding: var(--space-md);
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: var(--radius-md);
+  animation: shake 0.5s ease-in-out;
+}
+
+.error-message i {
+  font-size: 1.2rem;
+}
+
+/* ============================================
+   📜 HISTORY SECTION
+   ============================================ */
+.history-section {
+  width: 100%;
+  max-width: 500px;
+  margin-top: var(--space-2xl);
+  animation: slideUp 0.6s ease-out 0.5s both;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.history-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.history-badge {
+  background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+}
+
+.history-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.history-item {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  animation: fadeInUp 0.4s ease-out;
+  animation-fill-mode: both;
+  transition: all var(--transition-normal);
+}
+
+.history-item:hover {
+  background: var(--glass-bg-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.history-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.history-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.history-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.history-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.history-item:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+.history-link {
+  display: block;
+  color: var(--neon-cyan);
+  font-size: 0.95rem;
+  text-decoration: none;
+  margin-bottom: var(--space-md);
+  word-break: break-all;
+  transition: color var(--transition-fast);
+}
+
+.history-link:hover {
+  color: var(--neon-green);
+}
+
+.history-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.history-btn {
+  flex: 1;
+  min-width: 100px;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.85rem;
+  font-family: var(--font-arabic);
+  font-weight: 500;
+  color: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  transition: all var(--transition-normal);
+  text-decoration: none;
+}
+
+.history-btn i {
+  font-size: 0.9rem;
+}
+
+.history-btn-chat {
+  background: linear-gradient(135deg, var(--neon-green), var(--whatsapp-dark));
+}
+
+.history-btn-lookup {
+  background: linear-gradient(135deg, var(--neon-cyan), #0056b3);
+}
+
+.history-btn-copy {
+  background: linear-gradient(135deg, var(--neon-orange), #e68900);
+}
+
+.history-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+
+/* ============================================
+   🎭 SUCCESS NOTIFICATION (TOAST)
+   ============================================ */
+.toast {
+  position: fixed;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: linear-gradient(135deg, var(--neon-green), var(--whatsapp-dark));
+  color: var(--text-primary);
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  box-shadow: 0 10px 40px rgba(37, 211, 102, 0.4);
+  z-index: var(--z-modal);
+  opacity: 0;
+  pointer-events: none;
+  transition: all var(--transition-bounce);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.toast i {
+  font-size: 1.2rem;
+}
+
+/* ============================================
+   🎆 CONFETTI CONTAINER
+   ============================================ */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: var(--z-overlay);
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  animation: confetti-fall 3s ease-out forwards;
+}
+
+/* ============================================
+   🖼️ FOOTER
+   ============================================ */
+.footer {
+  margin-top: auto;
+  padding: var(--space-xl);
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.footer .copyright {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: var(--space-sm);
+}
+
+.footer .certified-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  margin-top: var(--space-sm);
+  box-shadow: 0 4px 15px rgba(132, 94, 194, 0.4);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.footer .certified-badge i {
+  font-size: 0.85rem;
+  color: var(--neon-gold);
+}
+
+/* ============================================
+   🏷️ BRAND HEADER (Falcon01 Team)
+   ============================================ */
+.brand-header {
+  margin-bottom: var(--space-xl);
+  text-align: center;
+}
+
+.brand-name {
+  font-family: var(--font-english);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientText 4s ease infinite;
+}
+
+.footer a {
+  color: var(--neon-cyan);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer a:hover {
+  color: var(--neon-green);
+}
