@@ -8,7 +8,7 @@
 [![Team](https://img.shields.io/badge/team-Falcon01-845EC2?style=for-the-badge)](https://github.com/falcon01-team)
 [![License](https://img.shields.io/badge/Licensing-MIT-00D4FF?style=for-the-badge)](LICENSE)
 
-### [✨ انقر هنا لاستخدام الأداة ✨](https://f2lcon01.github.io/whatsapp-link-generator/)
+### [✨ انقر هنا لاستخدام الأداة ✨](https://f2lcon01.github.io/Generate-WhatsApp-link/)
 
 </div>
 
@@ -58,24 +58,6 @@
 - **JavaScript ES6+** - Modern APIs, Async/Await
 - **Font Awesome 6** - الأيقونات
 - **Tajawal & Inter** - الخطوط
-
----
-
-## 📂 هيكل المشروع
-
-```
-WhatsApp-Ai-main/
-├── 📄 index.html        # الصفحة الرئيسية
-├── 📁 css/
-│   ├── style.css        # نظام التصميم
-│   ├── animations.css   # التأثيرات الحركية
-│   └── responsive.css   # التصميم المتجاوب
-├── 📁 js/
-│   ├── app.js           # المنطق الرئيسي
-│   ├── particles.js     # نظام الجزيئات
-│   └── animations.js    # مكتبة الحركات
-└── 📄 README.md         # هذا الملف
-```
 
 ---
 
