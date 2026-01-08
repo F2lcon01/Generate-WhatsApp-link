@@ -4,11 +4,11 @@
 
 ![WhatsApp Generator Banner](https://capsule-render.vercel.app/api?type=waving&color=25D366&height=200&section=header&text=WhatsApp%20Generator&fontSize=70&fontColor=ffffff&fontAlignY=35&desc=Falcon01%20Team&descAlignY=60&descAlign=50)
 
-[![Version](https://img.shields.io/badge/version-v0.2%20(Beta)-25D366?style=for-the-badge&logo=whatsapp)](https://github.com/falcon01-team)
-[![Team](https://img.shields.io/badge/team-Falcon01-845EC2?style=for-the-badge)](https://github.com/falcon01-team)
-[![License](https://img.shields.io/badge/Licensing-MIT-00D4FF?style=for-the-badge)](LICENSE)
+[![Version](https://img.shields.io/badge/الإصدار-v0.2%20(Beta)-25D366?style=for-the-badge&logo=whatsapp)](https://github.com/falcon01-team)
+[![Team](https://img.shields.io/badge/الفريق-Falcon01-845EC2?style=for-the-badge)](https://github.com/falcon01-team)
+[![License](https://img.shields.io/badge/الترخيص-MIT-00D4FF?style=for-the-badge)](LICENSE)
 
-### [✨ انقر هنا لاستخدام الأداة ✨](https://f2lcon01.github.io/Generate-WhatsApp-link/)
+### [✨ انقر هنا لاستخدام الأداة ✨](https://f2lcon01.github.io/whatsapp-link-generator/)
 
 </div>
 
@@ -18,7 +18,7 @@
 
 **مولد رابط واتساب** هي أداة ذكية وسريعة لإنشاء روابط واتساب مباشرة للأرقام السعودية. صُممت بتقنيات حديثة وواجهة **Neon Pulse** المبهرة لتوفير تجربة استخدام ممتعة ومحفزة.
 
-
+---
 
 ## ✨ المميزات الرئيسية
 
@@ -32,7 +32,7 @@
 | **📤 مشاركة فورية** | دعم Web Share API للمشاركة السريعة |
 | **⌨️ اختصارات لوحة المفاتيح** | Enter للإنشاء، Escape للمسح |
 
-
+---
 
 ## 🛠️ طريقة الاستخدام
 
@@ -40,18 +40,18 @@
 2. **أنشئ الرابط**: اضغط على زر **"إنشاء الرابط"** 🔗
 3. **استمتع**: انسخ الرابط أو شاركه مباشرة عبر واتساب
 
-
+---
 
 ## 🎨 التصميم والتقنيات
 
 ### نظام الألوان (Neon Pulse)
-
-🟢 أخضر نيون    (#25D366)   - الأزرار الرئيسية
-🔵 سماوي كهربائي (#00D4FF)    - الروابط والمعلومات
-🟣 بنفسجي       (#845EC2)   - الأزرار الثانوية
-🔴 وردي نيون    (#FF1B6B)   - المشاركة
-🟠 برتقالي       (#FF9800)   - النسخ
-
+```
+🟢 أخضر نيون    #25D366  - الأزرار الرئيسية
+🔵 سماوي كهربائي #00D4FF  - الروابط والمعلومات
+🟣 بنفسجي       #845EC2  - الأزرار الثانوية
+🔴 وردي نيون    #FF1B6B  - المشاركة
+🟠 برتقالي      #FF9800  - النسخ
+```
 
 ### المكتبات والتقنيات
 - **CSS3** - Glassmorphism, Grid, Flexbox, Animations
@@ -59,9 +59,10 @@
 - **Font Awesome 6** - الأيقونات
 - **Tajawal & Inter** - الخطوط
 
+---
 
 
-
+---
 
 ## 📋 سجل التحديثات
 
@@ -77,7 +78,7 @@
 - 🔹 الوظائف الأساسية
 - 🔹 تصميم بسيط
 
-
+---
 
 <div align="center">
 
