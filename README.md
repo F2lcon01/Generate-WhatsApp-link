@@ -8,7 +8,7 @@
 [![Team](https://img.shields.io/badge/Team-Falcon01-845EC2?style=for-the-badge)](https://github.com/falcon01-team)
 [![License](https://img.shields.io/badge/License-MIT-00D4FF?style=for-the-badge)](LICENSE)
 
-### [✨ انقر هنا لاستخدام الأداة ✨](https://f2lcon01.github.io/whatsapp-link-generator/)
+### [✨ انقر هنا لاستخدام الأداة ✨](https://f2lcon01.github.io/Generate-WhatsApp-link/)
 
 </div>
 
