@@ -4,9 +4,9 @@
 
 ![WhatsApp Generator Banner](https://capsule-render.vercel.app/api?type=waving&color=25D366&height=200&section=header&text=WhatsApp%20Generator&fontSize=70&fontColor=ffffff&fontAlignY=35&desc=Falcon01%20Team&descAlignY=60&descAlign=50)
 
-[![Version](https://img.shields.io/badge/الإصدار-v0.2%20(Beta)-25D366?style=for-the-badge&logo=whatsapp)](https://github.com/falcon01-team)
-[![Team](https://img.shields.io/badge/الفريق-Falcon01-845EC2?style=for-the-badge)](https://github.com/falcon01-team)
-[![License](https://img.shields.io/badge/الترخيص-MIT-00D4FF?style=for-the-badge)](LICENSE)
+[![Version](https://img.shields.io/badge/version-v0.2%20(Beta)-25D366?style=for-the-badge&logo=whatsapp)](https://github.com/falcon01-team)
+[![Team](https://img.shields.io/badge/team-Falcon01-845EC2?style=for-the-badge)](https://github.com/falcon01-team)
+[![License](https://img.shields.io/badge/Licensing-MIT-00D4FF?style=for-the-badge)](LICENSE)
 
 ### [✨ انقر هنا لاستخدام الأداة ✨](https://f2lcon01.github.io/whatsapp-link-generator/)
 
