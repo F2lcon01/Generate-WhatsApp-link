@@ -415,6 +415,31 @@ function clearInput() {
 }
 
 /* ============================================
+   🗑️ CLEAR HISTORY
+   ============================================ */
+function clearHistory() {
+    if (AppState.linkHistory.length === 0) return;
+    
+    const historyList = document.getElementById('historyList');
+    const items = Array.from(historyList.children);
+    
+    // Animate each item out with stagger
+    items.forEach((item, i) => {
+        item.style.transition = `all 0.3s ease ${i * 0.05}s`;
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(50px) scale(0.95)';
+    });
+    
+    // After animation completes, clear data
+    setTimeout(() => {
+        AppState.linkHistory = [];
+        updateHistoryDisplay();
+        saveHistoryToStorage();
+        window.toast?.success('تم مسح السجل بالكامل! 🗑️');
+    }, items.length * 50 + 300);
+}
+
+/* ============================================
    💾 LOCAL STORAGE — with error handling
    ============================================ */
 function saveHistoryToStorage() {
@@ -485,6 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('lookupBtn')?.addEventListener('click', lookupNumber);
     document.getElementById('clearBtn')?.addEventListener('click', clearInput);
     document.getElementById('shareBtn')?.addEventListener('click', shareLink);
+    document.getElementById('clearHistoryBtn')?.addEventListener('click', clearHistory);
     
     // Focus input after animations settle
     setTimeout(() => {

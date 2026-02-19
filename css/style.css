@@ -690,6 +690,36 @@ body {
   text-align: center;
 }
 
+/* Clear History Button */
+.clear-history-btn {
+  margin-right: auto;
+  margin-left: 0;
+  background: rgba(255, 107, 107, 0.15);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  color: var(--neon-coral);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.clear-history-btn:hover {
+  background: rgba(255, 107, 107, 0.3);
+  border-color: var(--neon-coral);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
+}
+
+.clear-history-btn:active {
+  transform: scale(0.95);
+}
+
 .history-list {
   list-style: none;
   display: flex;
