@@ -134,16 +134,16 @@ function generateWhatsAppLink() {
         return;
     }
     
-    // Check: must contain at least some digits
-    if (!/\d/.test(phone)) {
-        showError('يرجى إدخال أرقام فقط.');
+    // Check: only allow digits, spaces, +, -, (, ), .
+    if (/[^\d\s\+\-\.\(\)]/.test(phone)) {
+        showError('يرجى إدخال أرقام فقط — بدون أحرف.');
         window.inputAnimations?.shakeError(phoneInput);
         return;
     }
     
-    // Check: only allow digits, spaces, +, -, (, ), .
-    if (/[^\d\s\+\-\.\(\)]/.test(phone)) {
-        showError('يرجى إدخال أرقام فقط — بدون أحرف.');
+    // Check: must contain at least some digits
+    if (!/\d/.test(phone)) {
+        showError('يرجى إدخال أرقام فقط.');
         window.inputAnimations?.shakeError(phoneInput);
         return;
     }
