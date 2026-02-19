@@ -14,14 +14,15 @@ class ParticleSystem {
         this.isMouseOver = false;
         this.animationId = null;
         this.isVisible = true;
+        this.isScrolling = false;
         
         this.config = {
-            particleCount: 35,
+            particleCount: 20,
             particleMinSize: 1,
-            particleMaxSize: 3,
-            particleSpeed: 0.3,
-            connectionDistance: 100,
-            mouseRadius: 150,
+            particleMaxSize: 2.5,
+            particleSpeed: 0.25,
+            connectionDistance: 80,
+            mouseRadius: 120,
             colors: [
                 'rgba(37, 211, 102, 0.7)',
                 'rgba(0, 212, 255, 0.7)',
@@ -85,6 +86,14 @@ class ParticleSystem {
                 this.adjustForScreenSize();
             }, 250);
         });
+        
+        // Pause during scroll for smooth scrolling
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            this.isScrolling = true;
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => { this.isScrolling = false; }, 150);
+        }, { passive: true });
         
         document.addEventListener('mousemove', (e) => {
             this.mousePosition.x = e.clientX;
@@ -201,8 +210,13 @@ class ParticleSystem {
     
     animate() {
         if (!this.isVisible) return;
-        this.updateParticles();
-        this.drawParticles();
+        
+        // Skip heavy work during scroll for smooth scrolling
+        if (!this.isScrolling) {
+            this.updateParticles();
+            this.drawParticles();
+        }
+        
         this.animationId = requestAnimationFrame(() => this.animate());
     }
     
@@ -213,8 +227,8 @@ class ParticleSystem {
         const isMobile = window.innerWidth < 768;
         
         // Aggressive reduction for smooth scrolling
-        this.config.particleCount = Math.floor((isMobile ? 15 : 35) * ratio);
-        this.config.connectionDistance = isMobile ? 0 : 100; // Disable connections on mobile
+        this.config.particleCount = Math.floor((isMobile ? 10 : 20) * ratio);
+        this.config.connectionDistance = isMobile ? 0 : 80; // Disable connections on mobile
         this.createParticles();
     }
     
@@ -231,7 +245,7 @@ class FloatingStars {
     constructor(container) {
         this.container = container;
         this.stars = [];
-        this.starCount = window.innerWidth < 768 ? 8 : 18;
+        this.starCount = window.innerWidth < 768 ? 5 : 12;
         this.init();
     }
     

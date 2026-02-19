@@ -5,6 +5,26 @@
    ============================================ */
 
 /* ============================================
+   🎯 SCROLL PERFORMANCE
+   Pauses ALL animations during scroll for 60fps
+   ============================================ */
+html.is-scrolling,
+html.is-scrolling *,
+html.is-scrolling *::before,
+html.is-scrolling *::after {
+  animation-play-state: paused !important;
+  transition: none !important;
+}
+
+html.is-scrolling .background-container {
+  will-change: auto !important;
+}
+
+html.is-scrolling canvas {
+  visibility: hidden;
+}
+
+/* ============================================
    📦 IMPORTS & CUSTOM FONTS
    ============================================ */
 @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap");
@@ -81,6 +101,11 @@
 /* ============================================
    🔄 CSS RESET & BASE STYLES
    ============================================ */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
 *,
 *::before,
 *::after {
@@ -192,18 +217,17 @@ body {
     #1a1a2e 100%
   );
   background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
+  animation: gradientShift 30s ease infinite;
   will-change: auto;
   contain: layout style paint;
   transform: translateZ(0);
 }
 
-/* Animated Gradient Orbs — use will-change for GPU compositing */
+/* Animated Gradient Orbs — NO filter:blur, use soft gradients instead */
 .orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.6;
+  opacity: 0.4;
   animation: float 20s ease-in-out infinite;
   will-change: transform;
   contain: strict;
@@ -211,27 +235,27 @@ body {
 }
 
 .orb-1 {
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, var(--neon-purple), transparent 70%);
-  top: -200px;
-  right: -200px;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(132, 94, 194, 0.5) 0%, transparent 60%);
+  top: -300px;
+  right: -300px;
   animation-delay: 0s;
 }
 
 .orb-2 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, var(--neon-pink), transparent 70%);
-  bottom: -150px;
-  left: -150px;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(255, 27, 107, 0.4) 0%, transparent 60%);
+  bottom: -250px;
+  left: -250px;
   animation-delay: -5s;
 }
 
 .orb-3 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, var(--neon-cyan), transparent 70%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.35) 0%, transparent 60%);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -239,9 +263,9 @@ body {
 }
 
 .orb-4 {
-  width: 350px;
-  height: 350px;
-  background: radial-gradient(circle, var(--neon-green), transparent 70%);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(37, 211, 102, 0.35) 0%, transparent 60%);
   bottom: 20%;
   right: 20%;
   animation-delay: -7s;

@@ -526,6 +526,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Offline Detection
     initOfflineDetection();
     
+    // Scroll Performance — pause all animations during scroll
+    initScrollOptimization();
+    
     console.log('🚀 WhatsApp Link Generator v0.4 initialized!');
 });
 
@@ -589,9 +592,24 @@ function initPWAInstall() {
     });
 }
 
+// Scroll Performance — freeze all animations during scroll
+function initScrollOptimization() {
+    let scrollTimer;
+    const html = document.documentElement;
+    
+    window.addEventListener('scroll', () => {
+        if (!html.classList.contains('is-scrolling')) {
+            html.classList.add('is-scrolling');
+        }
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => {
+            html.classList.remove('is-scrolling');
+        }, 200);
+    }, { passive: true });
+}
+
 // Offline Detection
-function initOfflineDetection() {
-    const banner = document.getElementById('offlineBanner');
+function initOfflineDetection() {    const banner = document.getElementById('offlineBanner');
     if (!banner) return;
     
     function updateStatus() {
