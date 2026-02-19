@@ -927,3 +927,66 @@ body {
 .footer a:hover {
   color: var(--neon-green);
 }
+
+/* ============================================
+   📲 PWA INSTALL BUTTON
+   ============================================ */
+.pwa-install-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  background: linear-gradient(135deg, var(--neon-green), var(--whatsapp-dark));
+  color: var(--text-primary);
+  border: none;
+  padding: 10px 24px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-arabic);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: var(--space-lg);
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+  transition: all var(--transition-normal);
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.pwa-install-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5);
+}
+
+.pwa-install-btn:active {
+  transform: scale(0.97);
+}
+
+.pwa-install-btn i {
+  font-size: 1rem;
+}
+
+/* ============================================
+   📡 OFFLINE BANNER
+   ============================================ */
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #ff9800, #e68900);
+  color: #000;
+  text-align: center;
+  padding: 8px var(--space-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: var(--font-arabic);
+  z-index: calc(var(--z-modal) + 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  animation: slideDown 0.3s ease-out;
+}
+
+.offline-banner i {
+  font-size: 1rem;
+}

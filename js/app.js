@@ -517,6 +517,101 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('phoneNumber')?.focus();
     }, 800);
     
-    console.log('🚀 WhatsApp Link Generator v0.3 initialized!');
+    // Register Service Worker (PWA)
+    registerServiceWorker();
+    
+    // PWA Install Prompt
+    initPWAInstall();
+    
+    // Offline Detection
+    initOfflineDetection();
+    
+    console.log('🚀 WhatsApp Link Generator v0.4 initialized!');
 });
+
+/* ============================================
+   📲 PWA — Service Worker + Install + Offline
+   ============================================ */
+
+// Register Service Worker
+function registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js')
+            .then((reg) => {
+                console.log('⚙️ Service Worker registered:', reg.scope);
+                
+                // Check for updates
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'activated') {
+                            window.toast?.info('تم تحديث التطبيق! 🔄');
+                        }
+                    });
+                });
+            })
+            .catch((err) => console.warn('SW registration failed:', err));
+    }
+}
+
+// PWA Install Prompt
+let deferredPrompt = null;
+
+function initPWAInstall() {
+    const installBtn = document.getElementById('pwaInstallBtn');
+    if (!installBtn) return;
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.style.display = 'inline-flex';
+    });
+    
+    installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        
+        deferredPrompt.prompt();
+        const result = await deferredPrompt.userChoice;
+        
+        if (result.outcome === 'accepted') {
+            window.toast?.success('تم تثبيت التطبيق! 🎉');
+            window.confetti?.burstFromElement(installBtn, 30);
+        }
+        
+        deferredPrompt = null;
+        installBtn.style.display = 'none';
+    });
+    
+    // Hide button if already installed
+    window.addEventListener('appinstalled', () => {
+        installBtn.style.display = 'none';
+        deferredPrompt = null;
+    });
+}
+
+// Offline Detection
+function initOfflineDetection() {
+    const banner = document.getElementById('offlineBanner');
+    if (!banner) return;
+    
+    function updateStatus() {
+        if (!navigator.onLine) {
+            banner.style.display = 'flex';
+        } else {
+            banner.style.display = 'none';
+        }
+    }
+    
+    window.addEventListener('online', () => {
+        banner.style.display = 'none';
+        window.toast?.success('تم استعادة الاتصال! 🌐');
+    });
+    
+    window.addEventListener('offline', () => {
+        banner.style.display = 'flex';
+        window.toast?.warning('انقطع الاتصال — التطبيق يعمل offline 📡');
+    });
+    
+    updateStatus();
+}
 /* v0.3.6 */
