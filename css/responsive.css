@@ -1,560 +1,152 @@
 /* ============================================
    📱 NEON PULSE RESPONSIVE DESIGN
-   Mobile-First Approach
+   Mobile-First — Enhanced v0.3
    ============================================ */
 
-/* ============================================
-   📱 BASE (Mobile First - 320px+)
-   ============================================ */
+/* BASE (Mobile 320px+) */
+.app-container { padding: var(--space-md); padding-top: var(--space-xl); }
+.logo-icon { width: 60px; height: 60px; font-size: 1.8rem; }
+.main-title { font-size: 1.8rem; }
+.subtitle { font-size: 0.95rem; }
+.glass-card { padding: var(--space-lg); border-radius: var(--radius-lg); }
+.input-field { padding: var(--space-md) var(--space-lg); padding-right: 3rem; font-size: 1rem; }
+.input-icon { right: var(--space-md); font-size: 1rem; }
+.button-group { flex-direction: column; }
+.btn { width: 100%; padding: var(--space-md); font-size: 0.95rem; }
+.history-section { margin-top: var(--space-xl); }
+.history-title { font-size: 1.1rem; }
+.history-item { padding: var(--space-md); }
+.history-actions { flex-direction: column; }
+.history-btn { width: 100%; padding: var(--space-sm) var(--space-md); font-size: 0.85rem; }
+.orb-3, .orb-4 { display: none; }
+.toast { width: 90%; max-width: 350px; padding: var(--space-sm) var(--space-md); font-size: 0.9rem; }
 
-/* Container adjustments */
-.app-container {
-    padding: var(--space-md);
-    padding-top: var(--space-xl);
-}
-
-/* Header */
-.logo-icon {
-    width: 60px;
-    height: 60px;
-    font-size: 1.8rem;
-}
-
-.main-title {
-    font-size: 1.8rem;
-}
-
-.subtitle {
-    font-size: 0.95rem;
-}
-
-/* Glass Card */
-.glass-card {
-    padding: var(--space-lg);
-    border-radius: var(--radius-lg);
-}
-
-/* Input */
-.input-field {
-    padding: var(--space-md) var(--space-lg);
-    padding-right: 3rem;
-    font-size: 1rem;
-}
-
-.input-icon {
-    right: var(--space-md);
-    font-size: 1rem;
-}
-
-/* Buttons */
-.button-group {
-    flex-direction: column;
-}
-
-.btn {
-    width: 100%;
-    padding: var(--space-md);
-    font-size: 0.95rem;
-}
-
-/* History */
-.history-section {
-    margin-top: var(--space-xl);
-}
-
-.history-title {
-    font-size: 1.1rem;
-}
-
-.history-item {
-    padding: var(--space-md);
-}
-
-.history-actions {
-    flex-direction: column;
-}
-
-.history-btn {
-    width: 100%;
-    padding: var(--space-sm) var(--space-md);
-    font-size: 0.85rem;
-}
-
-/* Hide some decorative elements on very small screens */
-.orb-3, .orb-4 {
-    display: none;
-}
-
-/* Toast */
-.toast {
-    width: 90%;
-    max-width: 350px;
-    padding: var(--space-sm) var(--space-md);
-    font-size: 0.9rem;
-}
-
-/* ============================================
-   📱 SMALL PHONES (375px+)
-   ============================================ */
+/* SMALL PHONES (375px+) */
 @media (min-width: 375px) {
-    .app-container {
-        padding: var(--space-lg);
-        padding-top: var(--space-xl);
-    }
-    
-    .main-title {
-        font-size: 2rem;
-    }
-    
-    .btn {
-        padding: var(--space-md) var(--space-lg);
-    }
+    .app-container { padding: var(--space-lg); padding-top: var(--space-xl); }
+    .main-title { font-size: 2rem; }
+    .btn { padding: var(--space-md) var(--space-lg); }
 }
 
-/* ============================================
-   📱 LARGE PHONES (480px+)
-   ============================================ */
+/* LARGE PHONES (480px+) */
 @media (min-width: 480px) {
-    .logo-icon {
-        width: 70px;
-        height: 70px;
-        font-size: 2rem;
-    }
-    
-    .main-title {
-        font-size: 2.2rem;
-    }
-    
-    .glass-card {
-        padding: var(--space-xl);
-    }
-    
-    .button-group {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    
-    .btn {
-        flex: 1 1 calc(50% - var(--space-sm));
-        min-width: 140px;
-    }
-    
-    .history-actions {
-        flex-direction: row;
-    }
-    
-    .history-btn {
-        width: auto;
-        flex: 1;
-    }
-    
-    /* Show orb-3 */
-    .orb-3 {
-        display: block;
-        width: 300px;
-        height: 300px;
-    }
+    .logo-icon { width: 70px; height: 70px; font-size: 2rem; }
+    .main-title { font-size: 2.2rem; }
+    .glass-card { padding: var(--space-xl); }
+    .button-group { flex-direction: row; flex-wrap: wrap; }
+    .btn { flex: 1 1 calc(50% - var(--space-sm)); min-width: 140px; }
+    .history-actions { flex-direction: row; }
+    .history-btn { width: auto; flex: 1; }
+    .orb-3 { display: block; width: 300px; height: 300px; }
 }
 
-/* ============================================
-   📱 TABLETS (768px+)
-   ============================================ */
+/* TABLETS (768px+) */
 @media (min-width: 768px) {
-    :root {
-        --space-xs: 0.375rem;
-        --space-sm: 0.625rem;
-        --space-md: 1.125rem;
-        --space-lg: 1.75rem;
-        --space-xl: 2.5rem;
-    }
-    
-    .app-container {
-        padding: var(--space-xl);
-        padding-top: var(--space-3xl);
-    }
-    
-    .header {
-        margin-bottom: var(--space-3xl);
-    }
-    
-    .logo-icon {
-        width: 80px;
-        height: 80px;
-        font-size: 2.5rem;
-    }
-    
-    .main-title {
-        font-size: 2.8rem;
-    }
-    
-    .subtitle {
-        font-size: 1.1rem;
-    }
-    
-    .glass-card {
-        padding: var(--space-2xl);
-        max-width: 520px;
-    }
-    
-    .input-field {
-        padding: var(--space-lg) var(--space-xl);
-        padding-right: 3.5rem;
-        font-size: 1.1rem;
-    }
-    
-    .button-group {
-        flex-wrap: nowrap;
-    }
-    
-    .btn {
-        flex: 1;
-        min-width: 120px;
-        font-size: 1rem;
-    }
-    
-    .history-section {
-        max-width: 520px;
-    }
-    
-    .history-title {
-        font-size: 1.3rem;
-    }
-    
-    .history-item {
-        padding: var(--space-lg);
-    }
-    
-    /* Show all orbs */
-    .orb-3, .orb-4 {
-        display: block;
-    }
-    
-    .orb-3 {
-        width: 400px;
-        height: 400px;
-    }
-    
-    .orb-4 {
-        width: 350px;
-        height: 350px;
-    }
+    :root { --space-xs: 0.375rem; --space-sm: 0.625rem; --space-md: 1.125rem; --space-lg: 1.75rem; --space-xl: 2.5rem; }
+    .app-container { padding: var(--space-xl); padding-top: var(--space-3xl); }
+    .header { margin-bottom: var(--space-3xl); }
+    .logo-icon { width: 80px; height: 80px; font-size: 2.5rem; }
+    .main-title { font-size: 2.8rem; }
+    .subtitle { font-size: 1.1rem; }
+    .glass-card { padding: var(--space-2xl); max-width: 520px; }
+    .input-field { padding: var(--space-lg) var(--space-xl); padding-right: 3.5rem; font-size: 1.1rem; }
+    .button-group { flex-wrap: nowrap; }
+    .btn { flex: 1; min-width: 120px; font-size: 1rem; }
+    .history-section { max-width: 520px; }
+    .history-title { font-size: 1.3rem; }
+    .history-item { padding: var(--space-lg); }
+    .orb-3, .orb-4 { display: block; }
+    .orb-3 { width: 400px; height: 400px; }
+    .orb-4 { width: 350px; height: 350px; }
 }
 
-/* ============================================
-   💻 LAPTOPS (1024px+)
-   ============================================ */
+/* LAPTOPS (1024px+) */
 @media (min-width: 1024px) {
-    .app-container {
-        padding: var(--space-2xl);
-        padding-top: var(--space-3xl);
-    }
-    
-    .logo-icon {
-        width: 90px;
-        height: 90px;
-        font-size: 2.8rem;
-    }
-    
-    .main-title {
-        font-size: 3.2rem;
-    }
-    
-    .glass-card {
-        max-width: 550px;
-        animation: floatCard 6s ease-in-out infinite;
-    }
-    
-    .input-field {
-        font-size: 1.2rem;
-    }
-    
-    .btn {
-        padding: var(--space-md) var(--space-xl);
-        font-size: 1.05rem;
-    }
-    
-    .btn:hover {
-        transform: translateY(-3px);
-    }
-    
-    .history-section {
-        max-width: 550px;
-    }
-    
-    .history-item:hover {
-        transform: translateY(-4px);
-    }
-    
-    /* Enhanced orbs */
-    .orb-1 {
-        width: 700px;
-        height: 700px;
-    }
-    
-    .orb-2 {
-        width: 600px;
-        height: 600px;
-    }
+    .app-container { padding: var(--space-2xl); padding-top: var(--space-3xl); }
+    .logo-icon { width: 90px; height: 90px; font-size: 2.8rem; }
+    .main-title { font-size: 3.2rem; }
+    .glass-card { max-width: 550px; animation: floatCard 6s ease-in-out infinite; }
+    .input-field { font-size: 1.2rem; }
+    .btn { padding: var(--space-md) var(--space-xl); font-size: 1.05rem; }
+    .btn:hover { transform: translateY(-3px); }
+    .history-section { max-width: 550px; }
+    .history-item:hover { transform: translateY(-4px); }
+    .orb-1 { width: 700px; height: 700px; }
+    .orb-2 { width: 600px; height: 600px; }
 }
 
-/* ============================================
-   🖥️ DESKTOPS (1280px+)
-   ============================================ */
+/* DESKTOPS (1280px+) */
 @media (min-width: 1280px) {
-    .app-container {
-        justify-content: center;
-    }
-    
-    .main-title {
-        font-size: 3.5rem;
-    }
-    
-    .glass-card {
-        max-width: 580px;
-        padding: var(--space-3xl);
-    }
-    
-    .history-section {
-        max-width: 580px;
-    }
+    .app-container { justify-content: center; }
+    .main-title { font-size: 3.5rem; }
+    .glass-card { max-width: 580px; padding: var(--space-3xl); }
+    .history-section { max-width: 580px; }
 }
 
-/* ============================================
-   🖥️ LARGE DESKTOPS (1440px+)
-   ============================================ */
+/* LARGE DESKTOPS (1440px+) */
 @media (min-width: 1440px) {
-    :root {
-        font-size: 17px;
-    }
-    
-    .main-title {
-        font-size: 3.8rem;
-    }
-    
-    .glass-card {
-        max-width: 620px;
-    }
-    
-    .history-section {
-        max-width: 620px;
-    }
-    
-    /* Larger orbs for bigger screens */
-    .orb-1 {
-        width: 800px;
-        height: 800px;
-    }
-    
-    .orb-2 {
-        width: 700px;
-        height: 700px;
-    }
-    
-    .orb-3 {
-        width: 500px;
-        height: 500px;
-    }
-    
-    .orb-4 {
-        width: 450px;
-        height: 450px;
-    }
+    :root { font-size: 17px; }
+    .main-title { font-size: 3.8rem; }
+    .glass-card { max-width: 620px; }
+    .history-section { max-width: 620px; }
+    .orb-1 { width: 800px; height: 800px; }
+    .orb-2 { width: 700px; height: 700px; }
+    .orb-3 { width: 500px; height: 500px; }
+    .orb-4 { width: 450px; height: 450px; }
 }
 
-/* ============================================
-   📺 4K DISPLAYS (2560px+)
-   ============================================ */
+/* 4K (2560px+) */
 @media (min-width: 2560px) {
-    :root {
-        font-size: 20px;
-    }
-    
-    .main-title {
-        font-size: 4.5rem;
-    }
-    
-    .logo-icon {
-        width: 120px;
-        height: 120px;
-        font-size: 3.5rem;
-    }
-    
-    .glass-card {
-        max-width: 750px;
-        border-radius: var(--radius-xl);
-    }
-    
-    .history-section {
-        max-width: 750px;
-    }
-    
-    /* Massive orbs for 4K */
-    .orb-1 {
-        width: 1000px;
-        height: 1000px;
-    }
-    
-    .orb-2 {
-        width: 900px;
-        height: 900px;
-    }
-    
-    .orb-3 {
-        width: 700px;
-        height: 700px;
-    }
-    
-    .orb-4 {
-        width: 600px;
-        height: 600px;
-    }
+    :root { font-size: 20px; }
+    .main-title { font-size: 4.5rem; }
+    .logo-icon { width: 120px; height: 120px; font-size: 3.5rem; }
+    .glass-card { max-width: 750px; border-radius: var(--radius-xl); }
+    .history-section { max-width: 750px; }
+    .orb-1 { width: 1000px; height: 1000px; }
+    .orb-2 { width: 900px; height: 900px; }
+    .orb-3 { width: 700px; height: 700px; }
+    .orb-4 { width: 600px; height: 600px; }
 }
 
-/* ============================================
-   🌙 LANDSCAPE MODE (Height Constraint)
-   ============================================ */
+/* LANDSCAPE */
 @media (max-height: 600px) and (orientation: landscape) {
-    .app-container {
-        padding-top: var(--space-md);
-    }
-    
-    .header {
-        margin-bottom: var(--space-md);
-    }
-    
-    .logo-icon {
-        width: 50px;
-        height: 50px;
-        font-size: 1.5rem;
-    }
-    
-    .main-title {
-        font-size: 1.6rem;
-    }
-    
-    .subtitle {
-        display: none;
-    }
-    
-    .glass-card {
-        padding: var(--space-md);
-    }
-    
-    .button-group {
-        margin-bottom: var(--space-sm);
-    }
-    
-    .history-section {
-        margin-top: var(--space-md);
-    }
+    .app-container { padding-top: var(--space-md); }
+    .header { margin-bottom: var(--space-md); }
+    .logo-icon { width: 50px; height: 50px; font-size: 1.5rem; }
+    .main-title { font-size: 1.6rem; }
+    .subtitle { display: none; }
+    .glass-card { padding: var(--space-md); }
+    .button-group { margin-bottom: var(--space-sm); }
+    .history-section { margin-top: var(--space-md); }
 }
 
-/* ============================================
-   🎨 REDUCED MOTION
-   ============================================ */
+/* REDUCED MOTION — Accessibility */
 @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
+    *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
-    
-    .glass-card {
-        animation: none;
-    }
-    
-    .orb {
-        animation: none;
-    }
-    
-    .logo-icon::before {
-        animation: none;
-    }
+    .glass-card { animation: none; }
+    .orb { animation: none; }
+    .logo-icon::before { animation: none; }
 }
 
-/* ============================================
-   🌓 DARK MODE PREFERENCE (Already dark, but enhanced)
-   ============================================ */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --glass-bg: rgba(255, 255, 255, 0.06);
-        --glass-bg-hover: rgba(255, 255, 255, 0.1);
-    }
-}
-
-/* ============================================
-   🔆 LIGHT MODE PREFERENCE (Optional alternative)
-   ============================================ */
-@media (prefers-color-scheme: light) {
-    /* Keep dark theme as it's part of the design */
-    /* Users who prefer light mode still get the vibrant neon experience */
-}
-
-/* ============================================
-   👆 TOUCH DEVICE OPTIMIZATIONS
-   ============================================ */
+/* TOUCH DEVICES */
 @media (hover: none) and (pointer: coarse) {
-    /* Larger touch targets */
-    .btn {
-        min-height: 48px;
-    }
-    
-    .history-btn {
-        min-height: 44px;
-    }
-    
-    .input-field {
-        min-height: 50px;
-    }
-    
-    /* Remove hover effects that won't work */
-    .btn:hover {
-        transform: none;
-    }
-    
-    .history-item:hover {
-        transform: none;
-    }
-    
-    /* Add active states instead */
-    .btn:active {
-        transform: scale(0.97);
-        filter: brightness(0.9);
-    }
-    
-    .history-btn:active {
-        transform: scale(0.97);
-    }
+    .btn { min-height: 48px; }
+    .history-btn { min-height: 44px; }
+    .input-field { min-height: 50px; }
+    .btn:hover { transform: none; }
+    .history-item:hover { transform: none; }
+    .btn:active { transform: scale(0.97); filter: brightness(0.9); }
+    .history-btn:active { transform: scale(0.97); }
 }
 
-/* ============================================
-   🖨️ PRINT STYLES
-   ============================================ */
+/* PRINT */
 @media print {
-    .background-container,
-    .orb,
-    #particles-canvas,
-    .confetti-container,
-    .toast {
-        display: none !important;
-    }
-    
-    body {
-        background: white !important;
-        color: black !important;
-    }
-    
-    .glass-card {
-        background: white !important;
-        border: 1px solid #ccc !important;
-        box-shadow: none !important;
-    }
-    
-    .btn {
-        background: #eee !important;
-        color: black !important;
-        border: 1px solid #999 !important;
-    }
+    .background-container, .orb, #particles-canvas, .confetti-container, .toast { display: none !important; }
+    body { background: white !important; color: black !important; }
+    .glass-card { background: white !important; border: 1px solid #ccc !important; box-shadow: none !important; }
+    .btn { background: #eee !important; color: black !important; border: 1px solid #999 !important; }
 }

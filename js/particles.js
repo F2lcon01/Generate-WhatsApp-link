@@ -1,35 +1,33 @@
 /* ============================================
    ⭐ NEON PULSE PARTICLE SYSTEM
-   Animated Background Particles
+   Enhanced v0.3 — Performance Optimized
    ============================================ */
 
 class ParticleSystem {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
-        if (!this.canvas) {
-            console.warn('Particle canvas not found');
-            return;
-        }
+        if (!this.canvas) return;
         
         this.ctx = this.canvas.getContext('2d');
         this.particles = [];
         this.mousePosition = { x: 0, y: 0 };
         this.isMouseOver = false;
+        this.animationId = null;
+        this.isVisible = true;
         
-        // Configuration
         this.config = {
-            particleCount: 80,
+            particleCount: 50,
             particleMinSize: 1,
-            particleMaxSize: 4,
-            particleSpeed: 0.5,
-            connectionDistance: 150,
-            mouseRadius: 200,
+            particleMaxSize: 3,
+            particleSpeed: 0.4,
+            connectionDistance: 120,
+            mouseRadius: 150,
             colors: [
-                'rgba(37, 211, 102, 0.8)',   // Neon Green
-                'rgba(0, 212, 255, 0.8)',     // Neon Cyan
-                'rgba(132, 94, 194, 0.8)',    // Neon Purple
-                'rgba(255, 27, 107, 0.8)',    // Neon Pink
-                'rgba(255, 199, 95, 0.8)'     // Neon Gold
+                'rgba(37, 211, 102, 0.7)',
+                'rgba(0, 212, 255, 0.7)',
+                'rgba(132, 94, 194, 0.7)',
+                'rgba(255, 27, 107, 0.7)',
+                'rgba(255, 199, 95, 0.7)'
             ]
         };
         
@@ -40,233 +38,238 @@ class ParticleSystem {
         this.resizeCanvas();
         this.createParticles();
         this.addEventListeners();
+        this.setupVisibilityObserver();
         this.animate();
     }
     
     resizeCanvas() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        this.canvas.width = window.innerWidth * dpr;
+        this.canvas.height = window.innerHeight * dpr;
+        this.canvas.style.width = window.innerWidth + 'px';
+        this.canvas.style.height = window.innerHeight + 'px';
+        this.ctx.scale(dpr, dpr);
     }
     
     createParticles() {
         this.particles = [];
+        const w = window.innerWidth;
+        const h = window.innerHeight;
         for (let i = 0; i < this.config.particleCount; i++) {
-            this.particles.push(this.createParticle());
+            this.particles.push(this.createParticle(w, h));
         }
     }
     
-    createParticle() {
+    createParticle(w, h) {
         const size = Math.random() * (this.config.particleMaxSize - this.config.particleMinSize) + this.config.particleMinSize;
-        const color = this.config.colors[Math.floor(Math.random() * this.config.colors.length)];
-        
         return {
-            x: Math.random() * this.canvas.width,
-            y: Math.random() * this.canvas.height,
-            size: size,
+            x: Math.random() * w,
+            y: Math.random() * h,
+            size,
             baseSize: size,
-            color: color,
+            colorIndex: Math.floor(Math.random() * this.config.colors.length),
             vx: (Math.random() - 0.5) * this.config.particleSpeed,
             vy: (Math.random() - 0.5) * this.config.particleSpeed,
-            opacity: Math.random() * 0.5 + 0.3,
+            opacity: Math.random() * 0.4 + 0.3,
             pulseSpeed: Math.random() * 0.02 + 0.01,
             pulseOffset: Math.random() * Math.PI * 2
         };
     }
     
     addEventListeners() {
+        let resizeTimeout;
         window.addEventListener('resize', () => {
-            this.resizeCanvas();
-            this.createParticles();
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                this.resizeCanvas();
+                this.adjustForScreenSize();
+            }, 250);
         });
         
-        this.canvas.addEventListener('mousemove', (e) => {
+        document.addEventListener('mousemove', (e) => {
             this.mousePosition.x = e.clientX;
             this.mousePosition.y = e.clientY;
             this.isMouseOver = true;
-        });
+        }, { passive: true });
         
-        this.canvas.addEventListener('mouseleave', () => {
+        document.addEventListener('mouseleave', () => {
             this.isMouseOver = false;
-        });
+        }, { passive: true });
         
-        // Touch support
-        this.canvas.addEventListener('touchmove', (e) => {
+        document.addEventListener('touchmove', (e) => {
             if (e.touches.length > 0) {
                 this.mousePosition.x = e.touches[0].clientX;
                 this.mousePosition.y = e.touches[0].clientY;
                 this.isMouseOver = true;
             }
-        });
+        }, { passive: true });
         
-        this.canvas.addEventListener('touchend', () => {
+        document.addEventListener('touchend', () => {
             this.isMouseOver = false;
-        });
+        }, { passive: true });
     }
     
-    updateParticles() {
-        const time = Date.now() * 0.001;
-        
-        this.particles.forEach(particle => {
-            // Move particle
-            particle.x += particle.vx;
-            particle.y += particle.vy;
-            
-            // Pulse effect
-            particle.size = particle.baseSize + Math.sin(time * particle.pulseSpeed * 10 + particle.pulseOffset) * 0.5;
-            
-            // Wrap around edges
-            if (particle.x < 0) particle.x = this.canvas.width;
-            if (particle.x > this.canvas.width) particle.x = 0;
-            if (particle.y < 0) particle.y = this.canvas.height;
-            if (particle.y > this.canvas.height) particle.y = 0;
-            
-            // Mouse interaction
-            if (this.isMouseOver) {
-                const dx = this.mousePosition.x - particle.x;
-                const dy = this.mousePosition.y - particle.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < this.config.mouseRadius) {
-                    const force = (this.config.mouseRadius - distance) / this.config.mouseRadius;
-                    particle.x -= dx * force * 0.02;
-                    particle.y -= dy * force * 0.02;
+    setupVisibilityObserver() {
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.isVisible = false;
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                    this.animationId = null;
                 }
+            } else {
+                this.isVisible = true;
+                if (!this.animationId) this.animate();
             }
         });
     }
     
-    drawParticles() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    updateParticles() {
+        const time = performance.now() * 0.001;
+        const w = window.innerWidth;
+        const h = window.innerHeight;
         
-        // Draw connections
+        for (let i = 0; i < this.particles.length; i++) {
+            const p = this.particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.size = p.baseSize + Math.sin(time * p.pulseSpeed * 10 + p.pulseOffset) * 0.4;
+            
+            if (p.x < 0) p.x = w;
+            else if (p.x > w) p.x = 0;
+            if (p.y < 0) p.y = h;
+            else if (p.y > h) p.y = 0;
+            
+            if (this.isMouseOver) {
+                const dx = this.mousePosition.x - p.x;
+                const dy = this.mousePosition.y - p.y;
+                const distSq = dx * dx + dy * dy;
+                const radiusSq = this.config.mouseRadius * this.config.mouseRadius;
+                if (distSq < radiusSq) {
+                    const force = (this.config.mouseRadius - Math.sqrt(distSq)) / this.config.mouseRadius;
+                    p.x -= dx * force * 0.015;
+                    p.y -= dy * force * 0.015;
+                }
+            }
+        }
+    }
+    
+    drawParticles() {
+        const ctx = this.ctx;
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
         this.drawConnections();
         
-        // Draw particles
-        this.particles.forEach(particle => {
-            this.ctx.beginPath();
-            this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-            this.ctx.fillStyle = particle.color;
-            this.ctx.globalAlpha = particle.opacity;
-            this.ctx.fill();
-            
-            // Glow effect
-            this.ctx.shadowBlur = 15;
-            this.ctx.shadowColor = particle.color;
-            this.ctx.fill();
-            this.ctx.shadowBlur = 0;
-        });
-        
-        this.ctx.globalAlpha = 1;
+        for (let i = 0; i < this.particles.length; i++) {
+            const p = this.particles[i];
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = this.config.colors[p.colorIndex];
+            ctx.globalAlpha = p.opacity;
+            ctx.fill();
+        }
+        ctx.globalAlpha = 1;
     }
     
     drawConnections() {
-        for (let i = 0; i < this.particles.length; i++) {
-            for (let j = i + 1; j < this.particles.length; j++) {
-                const dx = this.particles[i].x - this.particles[j].x;
-                const dy = this.particles[i].y - this.particles[j].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < this.config.connectionDistance) {
-                    const opacity = (1 - distance / this.config.connectionDistance) * 0.3;
-                    
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
-                    this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
-                    this.ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
-                    this.ctx.lineWidth = 0.5;
-                    this.ctx.stroke();
+        const ctx = this.ctx;
+        const maxDist = this.config.connectionDistance;
+        const maxDistSq = maxDist * maxDist;
+        const particles = this.particles;
+        const len = particles.length;
+        
+        ctx.lineWidth = 0.5;
+        for (let i = 0; i < len; i++) {
+            for (let j = i + 1; j < len; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const distSq = dx * dx + dy * dy;
+                if (distSq < maxDistSq) {
+                    const opacity = (1 - Math.sqrt(distSq) / maxDist) * 0.25;
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+                    ctx.stroke();
                 }
             }
         }
     }
     
     animate() {
+        if (!this.isVisible) return;
         this.updateParticles();
         this.drawParticles();
-        requestAnimationFrame(() => this.animate());
+        this.animationId = requestAnimationFrame(() => this.animate());
     }
     
-    // Method to update particle count based on screen size
     adjustForScreenSize() {
         const screenArea = window.innerWidth * window.innerHeight;
-        const baseArea = 1920 * 1080; // Reference screen size
-        const ratio = Math.min(screenArea / baseArea, 2);
+        const baseArea = 1920 * 1080;
+        const ratio = Math.min(Math.max(screenArea / baseArea, 0.3), 1.5);
+        const isMobile = window.innerWidth < 768;
         
-        this.config.particleCount = Math.floor(60 * ratio);
+        this.config.particleCount = Math.floor((isMobile ? 25 : 50) * ratio);
+        this.config.connectionDistance = isMobile ? 80 : 120;
         this.createParticles();
+    }
+    
+    destroy() {
+        if (this.animationId) cancelAnimationFrame(this.animationId);
+        this.particles = [];
     }
 }
 
 /* ============================================
-   🌟 FLOATING STARS EFFECT
+   🌟 FLOATING STARS
    ============================================ */
-
 class FloatingStars {
     constructor(container) {
         this.container = container;
         this.stars = [];
-        this.starCount = 30;
-        
+        this.starCount = window.innerWidth < 768 ? 15 : 25;
         this.init();
     }
     
     init() {
-        this.createStars();
-    }
-    
-    createStars() {
+        const fragment = document.createDocumentFragment();
         for (let i = 0; i < this.starCount; i++) {
             const star = document.createElement('div');
-            star.className = 'floating-star';
+            const size = Math.random() * 3 + 1;
             star.style.cssText = `
-                position: absolute;
-                width: ${Math.random() * 4 + 2}px;
-                height: ${Math.random() * 4 + 2}px;
-                background: white;
-                border-radius: 50%;
-                left: ${Math.random() * 100}%;
-                top: ${Math.random() * 100}%;
-                opacity: ${Math.random() * 0.5 + 0.3};
-                animation: twinkle ${Math.random() * 3 + 2}s ease-in-out infinite;
-                animation-delay: ${Math.random() * 3}s;
-                pointer-events: none;
+                position:absolute;width:${size}px;height:${size}px;
+                background:white;border-radius:50%;
+                left:${Math.random()*100}%;top:${Math.random()*100}%;
+                opacity:${Math.random()*0.4+0.2};
+                animation:twinkle ${Math.random()*3+2}s ease-in-out infinite;
+                animation-delay:${Math.random()*3}s;pointer-events:none;
             `;
-            
-            this.container.appendChild(star);
+            fragment.appendChild(star);
             this.stars.push(star);
         }
+        this.container.appendChild(fragment);
     }
     
     destroy() {
-        this.stars.forEach(star => star.remove());
+        this.stars.forEach(s => s.remove());
         this.stars = [];
     }
 }
 
 /* ============================================
-   🎆 INITIALIZE ON DOM LOAD
+   🚀 INITIALIZE
    ============================================ */
-
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize particle system
-    const particleCanvas = document.getElementById('particles-canvas');
-    if (particleCanvas) {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+    
+    const canvas = document.getElementById('particles-canvas');
+    if (canvas) {
         window.particleSystem = new ParticleSystem('particles-canvas');
-        
-        // Adjust particles for screen size
         window.particleSystem.adjustForScreenSize();
     }
     
-    // Initialize floating stars
-    const bgContainer = document.querySelector('.background-container');
-    if (bgContainer) {
-        window.floatingStars = new FloatingStars(bgContainer);
-    }
-});
-
-// Adjust on resize
-window.addEventListener('resize', () => {
-    if (window.particleSystem) {
-        window.particleSystem.adjustForScreenSize();
+    const bg = document.querySelector('.background-container');
+    if (bg) {
+        window.floatingStars = new FloatingStars(bg);
     }
 });

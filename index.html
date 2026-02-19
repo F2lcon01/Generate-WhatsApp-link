@@ -5,13 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta name="description" content="مولد روابط واتساب للأرقام السعودية - أداة سريعة وسهلة لإنشاء روابط واتساب مباشرة">
     <meta name="keywords" content="واتساب, رابط واتساب, السعودية, مولد روابط, WhatsApp Link Generator">
-    <meta name="author" content="WhatsApp Link Generator">
+    <meta name="author" content="Falcon01 Team">
     <meta name="theme-color" content="#25D366">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="مولد رابط واتساب">
+    <meta property="og:title" content="مولد رابط واتساب | WhatsApp Link Generator">
     <meta property="og:description" content="أداة سريعة وسهلة لإنشاء روابط واتساب مباشرة للأرقام السعودية">
     <meta property="og:type" content="website">
+    <meta property="og:locale" content="ar_SA">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="مولد رابط واتساب">
+    <meta name="twitter:description" content="أداة سريعة وسهلة لإنشاء روابط واتساب مباشرة للأرقام السعودية">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://f2lcon01.github.io/Generate-WhatsApp-link/">
     
     <title>مولد رابط واتساب | WhatsApp Link Generator</title>
     
@@ -30,40 +39,48 @@
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/responsive.css">
     
-    <!-- Favicon (WhatsApp Green) -->
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2325D366'/%3E%3Cpath d='M67.5 32.5c-4.6-4.6-10.7-7.1-17.2-7.1-13.4 0-24.3 10.9-24.3 24.3 0 4.3 1.1 8.5 3.2 12.2l-3.4 12.4 12.7-3.3c3.6 2 7.6 3 11.8 3 13.4 0 24.3-10.9 24.3-24.3 0-6.5-2.5-12.6-7.1-17.2z' fill='white'/%3E%3C/svg%3E">
+    
+    <!-- Structured Data (SEO) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "مولد رابط واتساب",
+        "description": "أداة سريعة وسهلة لإنشاء روابط واتساب مباشرة للأرقام السعودية",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Web",
+        "author": {
+            "@type": "Organization",
+            "name": "Falcon01 Team"
+        }
+    }
+    </script>
 </head>
 <body>
-    <!-- ============================================
-         🌌 ANIMATED BACKGROUND
-         ============================================ -->
-    <div class="background-container">
-        <!-- Gradient Orbs -->
+    <!-- 🌌 ANIMATED BACKGROUND -->
+    <div class="background-container" aria-hidden="true">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
         <div class="orb orb-3"></div>
         <div class="orb orb-4"></div>
-        
-        <!-- Particle Canvas -->
         <canvas id="particles-canvas"></canvas>
     </div>
     
-    <!-- ============================================
-         📦 MAIN APPLICATION
-         ============================================ -->
+    <!-- 📦 MAIN APPLICATION -->
     <div class="app-container">
         
-        <!-- ============================================
-             🏷️ HEADER
-             ============================================ -->
+        <!-- Skip Link (Accessibility) -->
+        <a href="#main-card" class="skip-link">تخطي إلى المحتوى الرئيسي</a>
+        
+        <!-- 🏷️ HEADER -->
         <header class="header">
-            <!-- Falcon01 Team Brand -->
             <div class="brand-header">
                 <span class="brand-name">FALCON01 TEAM</span>
             </div>
-            
             <div class="logo-container">
-                <div class="logo-icon">
+                <div class="logo-icon" aria-hidden="true">
                     <i class="fab fa-whatsapp"></i>
                 </div>
             </div>
@@ -71,86 +88,79 @@
             <p class="subtitle">أنشئ رابط واتساب مباشر لأي رقم سعودي</p>
         </header>
         
-        <!-- ============================================
-             💎 MAIN CARD
-             ============================================ -->
-        <main class="glass-card">
+        <!-- 💎 MAIN CARD -->
+        <main class="glass-card" id="main-card">
             
             <!-- Input Section -->
             <div class="input-wrapper">
+                <label for="phoneNumber" class="sr-only">رقم الجوال السعودي</label>
                 <input 
-                    type="text" 
+                    type="tel" 
                     id="phoneNumber" 
                     class="input-field" 
-                    placeholder="أدخل رقم الجوال"
+                    placeholder="أدخل رقم الجوال (مثال: 05XXXXXXXX)"
                     inputmode="numeric"
                     autocomplete="tel"
                     maxlength="15"
-                    aria-label="رقم الهاتف">
-                <i class="fas fa-phone input-icon"></i>
-                <div class="input-border-animation"></div>
+                    pattern="[0-9\s\-\+]*"
+                    aria-describedby="phone-hint">
+                <i class="fas fa-phone input-icon" aria-hidden="true"></i>
+                <div class="input-border-animation" aria-hidden="true"></div>
+                <small id="phone-hint" class="input-hint">أدخل رقم سعودي يبدأ بـ 05</small>
             </div>
             
-            <!-- Action Buttons -->
-            <div class="button-group">
-                <button class="btn btn-primary" onclick="generateWhatsAppLink()" id="generateBtn">
-                    <i class="fas fa-link"></i>
+            <!-- Action Buttons — no inline onclick, events attached in JS -->
+            <div class="button-group" role="group" aria-label="إجراءات الرابط">
+                <button class="btn btn-primary" id="generateBtn" type="button">
+                    <i class="fas fa-link" aria-hidden="true"></i>
                     <span>إنشاء الرابط</span>
                 </button>
-                <button class="btn btn-lookup" onclick="lookupNumber()">
-                    <i class="fas fa-search"></i>
+                <button class="btn btn-lookup" id="lookupBtn" type="button">
+                    <i class="fas fa-search" aria-hidden="true"></i>
                     <span>استعلام عن الرقم</span>
                 </button>
             </div>
-            <div class="button-group button-group-secondary">
-                <button class="btn btn-secondary" onclick="clearInput()">
-                    <i class="fas fa-eraser"></i>
+            <div class="button-group button-group-secondary" role="group" aria-label="إجراءات إضافية">
+                <button class="btn btn-secondary" id="clearBtn" type="button">
+                    <i class="fas fa-eraser" aria-hidden="true"></i>
                     <span>مسح</span>
                 </button>
-                <button class="btn btn-tertiary" onclick="shareLink()">
-                    <i class="fas fa-share-alt"></i>
+                <button class="btn btn-tertiary" id="shareBtn" type="button">
+                    <i class="fas fa-share-alt" aria-hidden="true"></i>
                     <span>مشاركة</span>
                 </button>
             </div>
             
             <!-- Result Container -->
-            <div class="result-container" id="result"></div>
+            <div class="result-container" id="result" role="status" aria-live="polite"></div>
             
             <!-- Error Container -->
-            <div class="error-message" id="error" style="display: none;"></div>
+            <div class="error-message" id="error" role="alert" aria-live="assertive" style="display: none;"></div>
             
         </main>
         
-        <!-- ============================================
-             📜 HISTORY SECTION
-             ============================================ -->
-        <section class="history-section" style="display: none;">
+        <!-- 📜 HISTORY SECTION -->
+        <section class="history-section" id="history-section" style="display: none;" aria-label="سجل الروابط السابقة">
             <div class="history-header">
-                <i class="fas fa-history" style="color: var(--neon-purple);"></i>
+                <i class="fas fa-history" style="color: var(--neon-purple);" aria-hidden="true"></i>
                 <h2 class="history-title">آخر الروابط</h2>
-                <span class="history-badge">0</span>
+                <span class="history-badge" aria-label="عدد الروابط المحفوظة">0</span>
             </div>
-            <ol class="history-list" id="historyList"></ol>
+            <ul class="history-list" id="historyList"></ul>
         </section>
         
-        <!-- ============================================
-             🖼️ FOOTER
-             ============================================ -->
+        <!-- 🖼️ FOOTER -->
         <footer class="footer">
-            <p class="copyright">
-                © 2026 Falcon01 Team. All Rights Reserved.
-            </p>
+            <p class="copyright">© 2026 Falcon01 Team. All Rights Reserved.</p>
             <p class="certified-badge">
-                <i class="fas fa-shield-alt"></i>
+                <i class="fas fa-shield-alt" aria-hidden="true"></i>
                 <span>Official Certified Site</span>
             </p>
         </footer>
         
     </div>
     
-    <!-- ============================================
-         📜 SCRIPTS
-         ============================================ -->
+    <!-- 📜 SCRIPTS -->
     <script src="js/particles.js"></script>
     <script src="js/animations.js"></script>
     <script src="js/app.js"></script>
