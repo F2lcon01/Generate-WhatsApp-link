@@ -4,10 +4,11 @@
 
 ![WhatsApp Generator Banner](https://capsule-render.vercel.app/api?type=waving&color=25D366&height=200&section=header&text=WhatsApp%20Generator&fontSize=70&fontColor=ffffff&fontAlignY=35&desc=Falcon01%20Team%20•%20v0.3&descAlignY=60&descAlign=50)
 
-[![Version](https://img.shields.io/badge/Version-v0.3-25D366?style=for-the-badge&logo=whatsapp)](https://github.com/F2lcon01/Generate-WhatsApp-link)
+[![Version](https://img.shields.io/badge/Version-v0.4-25D366?style=for-the-badge&logo=whatsapp)](https://github.com/F2lcon01/Generate-WhatsApp-link)
 [![Team](https://img.shields.io/badge/Team-Falcon01-845EC2?style=for-the-badge)](https://github.com/F2lcon01)
 [![License](https://img.shields.io/badge/License-MIT-00D4FF?style=for-the-badge)](LICENSE)
 [![Security](https://img.shields.io/badge/Security-Hardened-FF1B6B?style=for-the-badge&logo=shield)](https://github.com/F2lcon01/Generate-WhatsApp-link)
+[![PWA](https://img.shields.io/badge/PWA-Installable-25D366?style=for-the-badge&logo=pwa)](https://f2lcon01.github.io/Generate-WhatsApp-link/)
 [![Accessibility](https://img.shields.io/badge/A11y-WCAG%20AA-FFC75F?style=for-the-badge)](https://github.com/F2lcon01/Generate-WhatsApp-link)
 
 ### [✨ انقر هنا لاستخدام الأداة ✨](https://f2lcon01.github.io/Generate-WhatsApp-link/)
@@ -144,6 +145,21 @@ Generate-WhatsApp-link/
 
 ---
 
+## 📲 تطبيق ويب تقدمي (PWA)
+
+الموقع يعمل كتطبيق كامل يمكن تثبيته على جهازك:
+
+| الميزة | التفاصيل |
+| :--- | :--- |
+| **تثبيت كتطبيق** | زر "تثبيت كتطبيق" يظهر تلقائياً — يضيف أيقونة على شاشتك الرئيسية |
+| **يعمل بدون إنترنت** | جميع الوظائف الأساسية تعمل offline عبر Service Worker |
+| **تحديث تلقائي** | يكتشف التحديثات ويحمّلها تلقائياً في الخلفية |
+| **كاش ذكي** | Network First للصفحات، Cache First للملفات — سرعة + حداثة |
+| **كشف الاتصال** | بانر تنبيه عند انقطاع الإنترنت مع إشعار عند العودة |
+| **دعم iOS** | يعمل كتطبيق على iPhone/iPad عبر "إضافة للشاشة الرئيسية" |
+
+---
+
 ## ⌨️ اختصارات لوحة المفاتيح
 
 | الاختصار | الوظيفة |
@@ -155,6 +171,16 @@ Generate-WhatsApp-link/
 ---
 
 ## 📋 سجل التحديثات
+
+### v0.4 — 📲 PWA + Offline + Performance
+- 📲 **Progressive Web App** — يتثبت كتطبيق على الجوال والكمبيوتر
+- ⚙️ **Service Worker** — كاش ذكي يجعل التطبيق يعمل بدون إنترنت
+- 📡 **Offline Detection** — بانر تنبيه + إشعارات عند تغير حالة الاتصال
+- 🗑️ **مسح السجل** — زر حذف جميع الأرقام المحفوظة
+- 🧠 **تعرف ذكي على الأرقام** — يقبل كل صيغ الأرقام السعودية (+966, 05, 00966, بمسافات وشرطات)
+- 💬 **رسائل خطأ ذكية** — توضح بالضبط سبب الخطأ (رقم ناقص/طويل/خاطئ)
+- 🔄 **Cache Busting** — تحديث تلقائي للملفات بدون كاش قديم
+
 
 ### v0.3 — 🔒 Security, Performance & Accessibility Overhaul
 #### 🔴 إصلاحات حرجة
@@ -217,7 +243,7 @@ Generate-WhatsApp-link/
 
 ### 🦅 صُنع بإتقان من فريق Falcon01
 
-*v0.3 — Secure • Fast • Accessible*
+*v0.4 — PWA • Offline • Installable*
 
 [![Made with ❤️](https://img.shields.io/badge/Made%20with-❤️-FF1B6B?style=flat-square)](https://github.com/F2lcon01)
 
