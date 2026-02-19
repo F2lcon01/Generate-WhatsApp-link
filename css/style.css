@@ -193,6 +193,9 @@ body {
   );
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
+  will-change: auto;
+  contain: layout style paint;
+  transform: translateZ(0);
 }
 
 /* Animated Gradient Orbs — use will-change for GPU compositing */
@@ -203,6 +206,8 @@ body {
   opacity: 0.6;
   animation: float 20s ease-in-out infinite;
   will-change: transform;
+  contain: strict;
+  pointer-events: none;
 }
 
 .orb-1 {
@@ -265,6 +270,8 @@ body {
   min-height: 100vh;
   padding: var(--space-xl);
   padding-top: var(--space-3xl);
+  transform: translateZ(0);
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ============================================

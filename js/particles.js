@@ -16,11 +16,11 @@ class ParticleSystem {
         this.isVisible = true;
         
         this.config = {
-            particleCount: 50,
+            particleCount: 35,
             particleMinSize: 1,
             particleMaxSize: 3,
-            particleSpeed: 0.4,
-            connectionDistance: 120,
+            particleSpeed: 0.3,
+            connectionDistance: 100,
             mouseRadius: 150,
             colors: [
                 'rgba(37, 211, 102, 0.7)',
@@ -157,7 +157,11 @@ class ParticleSystem {
     drawParticles() {
         const ctx = this.ctx;
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-        this.drawConnections();
+        
+        // Skip connections if disabled (mobile)
+        if (this.config.connectionDistance > 0) {
+            this.drawConnections();
+        }
         
         for (let i = 0; i < this.particles.length; i++) {
             const p = this.particles[i];
@@ -208,8 +212,9 @@ class ParticleSystem {
         const ratio = Math.min(Math.max(screenArea / baseArea, 0.3), 1.5);
         const isMobile = window.innerWidth < 768;
         
-        this.config.particleCount = Math.floor((isMobile ? 25 : 50) * ratio);
-        this.config.connectionDistance = isMobile ? 80 : 120;
+        // Aggressive reduction for smooth scrolling
+        this.config.particleCount = Math.floor((isMobile ? 15 : 35) * ratio);
+        this.config.connectionDistance = isMobile ? 0 : 100; // Disable connections on mobile
         this.createParticles();
     }
     
@@ -226,7 +231,7 @@ class FloatingStars {
     constructor(container) {
         this.container = container;
         this.stars = [];
-        this.starCount = window.innerWidth < 768 ? 15 : 25;
+        this.starCount = window.innerWidth < 768 ? 8 : 18;
         this.init();
     }
     

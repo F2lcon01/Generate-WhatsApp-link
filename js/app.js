@@ -95,8 +95,10 @@ function generateWhatsAppLink() {
         return;
     }
     
-    const cleaned = phone.replace(/[\s\-\+]/g, '');
-    if (!/^\d+$/.test(cleaned)) {
+    // Clean spaces, dashes, plus, dots, parentheses BEFORE validation
+    phone = phone.replace(/[\s\-\+\.\(\)]/g, '');
+    
+    if (!/^\d+$/.test(phone)) {
         showError('يرجى إدخال أرقام فقط.');
         window.inputAnimations?.shakeError(phoneInput);
         return;
