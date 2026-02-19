@@ -519,3 +519,4 @@ document.addEventListener('DOMContentLoaded', () => {
     
     console.log('🚀 WhatsApp Link Generator v0.3 initialized!');
 });
+/* v0.3.6 */
