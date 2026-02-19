@@ -107,7 +107,18 @@ function generateWhatsAppLink() {
     const normalizedPhone = normalizePhoneNumber(phone);
     
     if (!validateSaudiNumber(normalizedPhone)) {
-        showError('يرجى إدخال رقم جوال سعودي صحيح (يبدأ بـ 05).');
+        // Give specific error message
+        const digits = normalizedPhone.replace(/\D/g, '');
+        if (!normalizedPhone.startsWith('9665')) {
+            showError('الرقم يجب أن يبدأ بـ 05 أو 9665 — تأكد من صحة الرقم.');
+        } else if (digits.length < 12) {
+            const missing = 12 - digits.length;
+            showError(`الرقم ناقص ${missing} ${missing === 1 ? 'رقم' : 'أرقام'} — الرقم السعودي يتكون من 10 أرقام (05XXXXXXXX).`);
+        } else if (digits.length > 12) {
+            showError('الرقم طويل جداً — الرقم السعودي يتكون من 10 أرقام (05XXXXXXXX).');
+        } else {
+            showError('يرجى إدخال رقم جوال سعودي صحيح (يبدأ بـ 05).');
+        }
         window.inputAnimations?.shakeError(phoneInput);
         return;
     }
