@@ -25,16 +25,55 @@ function convertArabicNumbers(str) {
     return str.replace(/[٠-٩۰-۹]/g, c => map[c] || c);
 }
 
-// Normalize phone number
-function normalizePhoneNumber(phone) {
-    phone = phone.replace(/\D/g, '');
-    if (phone.startsWith('00')) phone = phone.substring(2);
-    else if (phone.startsWith('0')) phone = phone.substring(1);
-    if (!phone.startsWith(AppState.countryCode)) phone = AppState.countryCode + phone;
-    return phone;
+/**
+ * 🧠 Smart Saudi Phone Number Normalizer
+ * Accepts ANY format and converts to international: 966XXXXXXXXX (12 digits)
+ * 
+ * Supported formats:
+ *   05XXXXXXXX          → 9665XXXXXXXX
+ *   5XXXXXXXX           → 9665XXXXXXXX
+ *   966 5XXXXXXXX       → 9665XXXXXXXX
+ *   +966 5XXXXXXXX      → 9665XXXXXXXX
+ *   00966 5XXXXXXXX     → 9665XXXXXXXX
+ *   009665XXXXXXXX      → 9665XXXXXXXX
+ *   +966 05XXXXXXXX     → 9665XXXXXXXX  (extra 0 after code)
+ *   966 05XXXXXXXX      → 9665XXXXXXXX  (extra 0 after code)
+ * 
+ * With any combination of spaces, dashes, dots, parentheses:
+ *   +966 55 994 8149
+ *   +966-55-994-8149
+ *   (05) 599 48149
+ *   966.55.994.8149
+ */
+function normalizePhoneNumber(rawInput) {
+    // Step 1: Strip ALL non-digit characters
+    let digits = rawInput.replace(/\D/g, '');
+    
+    // Step 2: Remove international prefix variations
+    // 00966... → remove 00966
+    if (digits.startsWith('00966')) {
+        digits = digits.substring(5);
+    }
+    // 966... → remove 966
+    else if (digits.startsWith('966')) {
+        digits = digits.substring(3);
+    }
+    
+    // Step 3: Now we should have local number, remove leading 0 if present
+    // 05XXXXXXXX → 5XXXXXXXX
+    if (digits.startsWith('0')) {
+        digits = digits.substring(1);
+    }
+    
+    // Step 4: Add country code back
+    return '966' + digits;
 }
 
-// Validate Saudi phone number (9665XXXXXXXX = 12 digits)
+/**
+ * Validate Saudi mobile number
+ * After normalization, must be: 9665XXXXXXXX (12 digits total)
+ * Saudi mobile numbers start with 05 (5 after country code)
+ */
 function validateSaudiNumber(normalizedPhone) {
     return /^9665\d{8}$/.test(normalizedPhone);
 }
@@ -95,15 +134,21 @@ function generateWhatsAppLink() {
         return;
     }
     
-    // Clean spaces, dashes, plus, dots, parentheses BEFORE validation
-    phone = phone.replace(/[\s\-\+\.\(\)]/g, '');
-    
-    if (!/^\d+$/.test(phone)) {
+    // Check: must contain at least some digits
+    if (!/\d/.test(phone)) {
         showError('يرجى إدخال أرقام فقط.');
         window.inputAnimations?.shakeError(phoneInput);
         return;
     }
     
+    // Check: only allow digits, spaces, +, -, (, ), .
+    if (/[^\d\s\+\-\.\(\)]/.test(phone)) {
+        showError('يرجى إدخال أرقام فقط — بدون أحرف.');
+        window.inputAnimations?.shakeError(phoneInput);
+        return;
+    }
+    
+    // Normalize handles ALL formats: +966 55 994 8149, 05XXXXXXXX, 966XXXXXXXX, etc.
     const normalizedPhone = normalizePhoneNumber(phone);
     
     if (!validateSaudiNumber(normalizedPhone)) {
