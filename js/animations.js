@@ -1,5 +1,5 @@
 /* ============================================
-   🎬 NEON PULSE UI ANIMATIONS — Enhanced v0.3
+   🎬 NEON PULSE UI ANIMATIONS — Enhanced v0.5
    ============================================ */
 
 /* 🎆 CONFETTI */
@@ -40,31 +40,67 @@ class ConfettiExplosion {
 }
 window.confetti = new ConfettiExplosion();
 
-/* 🔔 TOAST */
+/* 🔔 TOAST — #issue-12: proper stacking */
 class ToastNotification {
-    constructor() { this.active = []; this.max = 3; }
+    constructor() {
+        this.active = [];
+        this.max = 3;
+        this.gap = 8; // px gap between stacked toasts
+    }
+    
+    _repositionAll() {
+        let bottomOffset = 32; // base bottom margin (var(--space-xl))
+        for (let i = this.active.length - 1; i >= 0; i--) {
+            const t = this.active[i];
+            if (t.classList.contains('show')) {
+                t.style.bottom = bottomOffset + 'px';
+                bottomOffset += t.offsetHeight + this.gap;
+            }
+        }
+    }
+    
     show(msg, type = 'success', dur = 3000) {
         if (this.active.length >= this.max) this.hide(this.active[0]);
+        
         const t = document.createElement('div');
         t.className = `toast toast-${type}`;
         t.setAttribute('role', 'status');
         t.setAttribute('aria-live', 'polite');
+        
         const icons = { success:'fa-check-circle', error:'fa-exclamation-circle', warning:'fa-exclamation-triangle', info:'fa-info-circle' };
-        const colors = { success:'linear-gradient(135deg,#25D366,#128C7E)', error:'linear-gradient(135deg,#FF6B6B,#ee5a5a)', warning:'linear-gradient(135deg,#FFC75F,#e6a800)', info:'linear-gradient(135deg,#00D4FF,#0099cc)' };
+        const colors = {
+            success: 'linear-gradient(135deg,#25D366,#128C7E)',
+            error: 'linear-gradient(135deg,#FF6B6B,#ee5a5a)',
+            warning: 'linear-gradient(135deg,#FFC75F,#e6a800)',
+            info: 'linear-gradient(135deg,#00D4FF,#0099cc)'
+        };
+        
         t.innerHTML = `<i class="fas ${icons[type]||icons.info}" aria-hidden="true"></i><span>${msg}</span>`;
         t.style.background = colors[type] || colors.info;
         document.body.appendChild(t);
-        requestAnimationFrame(() => t.classList.add('show'));
+        
         this.active.push(t);
+        
+        requestAnimationFrame(() => {
+            t.classList.add('show');
+            this._repositionAll();
+        });
+        
         t._timer = setTimeout(() => this.hide(t), dur);
         return t;
     }
+    
     hide(t) {
         if (!t?.parentNode) return;
         clearTimeout(t._timer);
         t.classList.remove('show');
-        setTimeout(() => { if (t.parentNode) t.remove(); this.active = this.active.filter(x => x !== t); }, 500);
+        setTimeout(() => {
+            if (t.parentNode) t.remove();
+            this.active = this.active.filter(x => x !== t);
+            this._repositionAll();
+        }, 500);
     }
+    
     success(m, d) { return this.show(m, 'success', d); }
     error(m, d) { return this.show(m, 'error', d); }
     warning(m, d) { return this.show(m, 'warning', d); }
@@ -152,7 +188,6 @@ window.historyAnimations = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Input focus/blur animations
     document.querySelectorAll('.input-field').forEach(input => {
         input.addEventListener('focus', () => {
             const wrapper = input.closest('.input-wrapper');

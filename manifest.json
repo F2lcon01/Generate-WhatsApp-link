@@ -2,7 +2,7 @@
     "name": "مولد رابط واتساب | WhatsApp Link Generator",
     "short_name": "واتساب لينك",
     "description": "أداة سريعة لإنشاء روابط واتساب مباشرة للأرقام السعودية",
-    "start_url": "./index.html",
+    "start_url": "./",
     "display": "standalone",
     "orientation": "portrait",
     "background_color": "#0f0c29",

@@ -1,9 +1,9 @@
 /* ============================================
    ⚙️ SERVICE WORKER — Offline + Cache
-   WhatsApp Link Generator v0.4
+   WhatsApp Link Generator v0.5
    ============================================ */
 
-const CACHE_NAME = 'whatsapp-gen-v0.4';
+const CACHE_NAME = 'whatsapp-gen-v0.5';
 const ASSETS = [
     './',
     './index.html',
@@ -14,12 +14,6 @@ const ASSETS = [
     './js/animations.js',
     './js/particles.js',
     './manifest.json'
-];
-
-// External resources (cache on first use)
-const EXTERNAL_ASSETS = [
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
-    'https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap'
 ];
 
 /* Install — cache core assets */
@@ -53,10 +47,9 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
     
-    // Skip non-GET requests
     if (event.request.method !== 'GET') return;
     
-    // HTML — Network First (always try fresh)
+    // HTML — Network First
     if (event.request.mode === 'navigate' || url.pathname.endsWith('.html')) {
         event.respondWith(
             fetch(event.request)
@@ -65,12 +58,19 @@ self.addEventListener('fetch', (event) => {
                     caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
                     return response;
                 })
-                .catch(() => caches.match(event.request) || caches.match('./index.html'))
+                .catch(() => {
+                    // #issue-9: proper fallback chain
+                    return caches.match(event.request).then((cached) => {
+                        return cached || caches.match('./index.html').then((fallback) => {
+                            return fallback || new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
+                        });
+                    });
+                })
         );
         return;
     }
     
-    // CSS/JS/Fonts — Cache First (fast loading)
+    // CSS/JS/Fonts — Cache First
     event.respondWith(
         caches.match(event.request).then((cached) => {
             if (cached) return cached;
@@ -82,8 +82,7 @@ self.addEventListener('fetch', (event) => {
                 }
                 return response;
             }).catch(() => {
-                // Offline fallback for external resources
-                return new Response('', { status: 408 });
+                return new Response('', { status: 408, statusText: 'Offline' });
             });
         })
     );

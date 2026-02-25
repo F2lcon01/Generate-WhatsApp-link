@@ -1,6 +1,6 @@
 /* ============================================
    ⭐ NEON PULSE PARTICLE SYSTEM
-   Enhanced v0.3 — Performance Optimized
+   Enhanced v0.5 — Performance Optimized
    ============================================ */
 
 class ParticleSystem {
@@ -87,7 +87,6 @@ class ParticleSystem {
             }, 250);
         });
         
-        // Pause during scroll for smooth scrolling
         let scrollTimeout;
         window.addEventListener('scroll', () => {
             this.isScrolling = true;
@@ -167,7 +166,6 @@ class ParticleSystem {
         const ctx = this.ctx;
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
         
-        // Skip connections if disabled (mobile)
         if (this.config.connectionDistance > 0) {
             this.drawConnections();
         }
@@ -211,7 +209,6 @@ class ParticleSystem {
     animate() {
         if (!this.isVisible) return;
         
-        // Skip heavy work during scroll for smooth scrolling
         if (!this.isScrolling) {
             this.updateParticles();
             this.drawParticles();
@@ -226,9 +223,8 @@ class ParticleSystem {
         const ratio = Math.min(Math.max(screenArea / baseArea, 0.3), 1.5);
         const isMobile = window.innerWidth < 768;
         
-        // Aggressive reduction for smooth scrolling
         this.config.particleCount = Math.floor((isMobile ? 10 : 20) * ratio);
-        this.config.connectionDistance = isMobile ? 0 : 80; // Disable connections on mobile
+        this.config.connectionDistance = isMobile ? 0 : 80;
         this.createParticles();
     }
     
@@ -238,9 +234,7 @@ class ParticleSystem {
     }
 }
 
-/* ============================================
-   🌟 FLOATING STARS
-   ============================================ */
+/* 🌟 FLOATING STARS */
 class FloatingStars {
     constructor(container) {
         this.container = container;
@@ -274,9 +268,7 @@ class FloatingStars {
     }
 }
 
-/* ============================================
-   🚀 INITIALIZE
-   ============================================ */
+/* 🚀 INITIALIZE */
 document.addEventListener('DOMContentLoaded', () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;

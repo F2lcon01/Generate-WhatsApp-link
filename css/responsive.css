@@ -1,6 +1,6 @@
 /* ============================================
    📱 NEON PULSE RESPONSIVE DESIGN
-   Mobile-First — Enhanced v0.3
+   Mobile-First — Enhanced v0.5
    ============================================ */
 
 /* BASE (Mobile 320px+) */
@@ -120,7 +120,7 @@
     .history-section { margin-top: var(--space-md); }
 }
 
-/* REDUCED MOTION — Accessibility */
+/* REDUCED MOTION */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         animation-duration: 0.01ms !important;

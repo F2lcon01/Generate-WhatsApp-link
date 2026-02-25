@@ -1,6 +1,6 @@
 /* ============================================
    🚀 NEON PULSE - MAIN APPLICATION
-   WhatsApp Link Generator — Enhanced v0.3
+   WhatsApp Link Generator — Enhanced v0.5
    Security + Performance + Accessibility Fixes
    ============================================ */
 
@@ -18,81 +18,57 @@ const AppState = {
    🔧 UTILITY FUNCTIONS
    ============================================ */
 
-// Convert Arabic/Persian numerals to English
+/** Convert Arabic/Persian numerals to English */
 function convertArabicNumbers(str) {
-    const map = { '٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9',
-                  '۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9' };
+    const map = {
+        '٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9',
+        '۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9'
+    };
     return str.replace(/[٠-٩۰-۹]/g, c => map[c] || c);
 }
 
 /**
  * 🧠 Smart Saudi Phone Number Normalizer
- * Accepts ANY format and converts to international: 966XXXXXXXXX (12 digits)
- * 
- * Supported formats:
- *   05XXXXXXXX          → 9665XXXXXXXX
- *   5XXXXXXXX           → 9665XXXXXXXX
- *   966 5XXXXXXXX       → 9665XXXXXXXX
- *   +966 5XXXXXXXX      → 9665XXXXXXXX
- *   00966 5XXXXXXXX     → 9665XXXXXXXX
- *   009665XXXXXXXX      → 9665XXXXXXXX
- *   +966 05XXXXXXXX     → 9665XXXXXXXX  (extra 0 after code)
- *   966 05XXXXXXXX      → 9665XXXXXXXX  (extra 0 after code)
- * 
- * With any combination of spaces, dashes, dots, parentheses:
- *   +966 55 994 8149
- *   +966-55-994-8149
- *   (05) 599 48149
- *   966.55.994.8149
+ * Accepts ANY format → 966XXXXXXXXX (12 digits)
  */
 function normalizePhoneNumber(rawInput) {
-    // Step 1: Strip ALL non-digit characters
     let digits = rawInput.replace(/\D/g, '');
     
-    // Step 2: Remove international prefix variations
-    // 00966... → remove 00966
     if (digits.startsWith('00966')) {
         digits = digits.substring(5);
-    }
-    // 966... → remove 966
-    else if (digits.startsWith('966')) {
+    } else if (digits.startsWith('966')) {
         digits = digits.substring(3);
     }
     
-    // Step 3: Now we should have local number, remove leading 0 if present
-    // 05XXXXXXXX → 5XXXXXXXX
     if (digits.startsWith('0')) {
         digits = digits.substring(1);
     }
     
-    // Step 4: Add country code back
     return '966' + digits;
 }
 
 /**
  * Validate Saudi mobile number
- * After normalization, must be: 9665XXXXXXXX (12 digits total)
- * Saudi mobile numbers start with 05 (5 after country code)
+ * After normalization: 9665XXXXXXXX (12 digits total)
  */
 function validateSaudiNumber(normalizedPhone) {
     return /^9665\d{8}$/.test(normalizedPhone);
 }
 
-// Safe text escaping for HTML context (XSS prevention)
+/** Safe text escaping (XSS prevention) */
 function escapeHTML(str) {
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
 }
 
-// Copy to clipboard with fallback
+/** Copy to clipboard with fallback */
 async function copyToClipboard(text) {
     try {
         if (navigator.clipboard?.writeText) {
             await navigator.clipboard.writeText(text);
             return true;
         }
-        // Fallback
         const textarea = document.createElement('textarea');
         textarea.value = text;
         textarea.style.cssText = 'position:fixed;opacity:0;';
@@ -123,6 +99,7 @@ function generateWhatsAppLink() {
     resultContainer.classList.remove('has-result');
     errorContainer.innerHTML = '';
     errorContainer.style.display = 'none';
+    phoneInput.removeAttribute('aria-invalid');
     
     let phone = phoneInput.value.trim();
     phone = convertArabicNumbers(phone);
@@ -130,29 +107,28 @@ function generateWhatsAppLink() {
     // Validations
     if (!phone) {
         showError('يرجى إدخال رقم الهاتف.');
+        phoneInput.setAttribute('aria-invalid', 'true');
         window.inputAnimations?.shakeError(phoneInput);
         return;
     }
     
-    // Check: only allow digits, spaces, +, -, (, ), .
     if (/[^\d\s\+\-\.\(\)]/.test(phone)) {
         showError('يرجى إدخال أرقام فقط — بدون أحرف.');
+        phoneInput.setAttribute('aria-invalid', 'true');
         window.inputAnimations?.shakeError(phoneInput);
         return;
     }
     
-    // Check: must contain at least some digits
     if (!/\d/.test(phone)) {
         showError('يرجى إدخال أرقام فقط.');
+        phoneInput.setAttribute('aria-invalid', 'true');
         window.inputAnimations?.shakeError(phoneInput);
         return;
     }
     
-    // Normalize handles ALL formats: +966 55 994 8149, 05XXXXXXXX, 966XXXXXXXX, etc.
     const normalizedPhone = normalizePhoneNumber(phone);
     
     if (!validateSaudiNumber(normalizedPhone)) {
-        // Give specific error message
         const digits = normalizedPhone.replace(/\D/g, '');
         if (!normalizedPhone.startsWith('9665')) {
             showError('الرقم يجب أن يبدأ بـ 05 أو 9665 — تأكد من صحة الرقم.');
@@ -164,16 +140,25 @@ function generateWhatsAppLink() {
         } else {
             showError('يرجى إدخال رقم جوال سعودي صحيح (يبدأ بـ 05).');
         }
+        phoneInput.setAttribute('aria-invalid', 'true');
         window.inputAnimations?.shakeError(phoneInput);
         return;
     }
     
     const whatsappLink = `https://wa.me/${normalizedPhone}`;
     
-    // Check duplicates
+    // Check duplicates — #issue-8: improved UX
     const existingIndex = AppState.linkHistory.indexOf(whatsappLink);
     if (existingIndex !== -1) {
-        showError(`تم إنشاء رابط لهذا الرقم مسبقًا — موجود في السجل رقم ${existingIndex + 1}.`);
+        // Show the result anyway + scroll to history
+        showResult(whatsappLink);
+        window.toast?.info(`الرابط موجود في السجل (رقم ${existingIndex + 1}) 📋`);
+        
+        // Scroll to history section
+        const historySection = document.getElementById('history-section');
+        if (historySection) {
+            historySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
         return;
     }
     
@@ -192,12 +177,11 @@ function generateWhatsAppLink() {
     }, 250);
 }
 
-// Show result — safe from XSS since we construct the link ourselves
+/** Show result — safe DOM construction */
 function showResult(link) {
     const container = document.getElementById('result');
     container.classList.add('has-result');
     
-    // Build DOM elements instead of innerHTML for safety
     const a = document.createElement('a');
     a.href = link;
     a.target = '_blank';
@@ -222,7 +206,7 @@ function showResult(link) {
     ], { duration: 400, easing: 'ease-out', fill: 'forwards' });
 }
 
-// Show error — safe via textContent
+/** Show error — safe via textContent */
 function showError(message) {
     const container = document.getElementById('error');
     container.style.display = 'flex';
@@ -259,7 +243,7 @@ function addToHistory(link) {
 function updateHistoryDisplay() {
     const historyList = document.getElementById('historyList');
     const historySection = document.getElementById('history-section');
-    const historyBadge = document.querySelector('.history-badge');
+    const historyBadge = document.getElementById('historyBadge');
     
     historyList.innerHTML = '';
     
@@ -280,7 +264,6 @@ function updateHistoryDisplay() {
         li.className = 'history-item';
         li.style.animationDelay = `${index * 0.1}s`;
         
-        // Build link
         const historyLink = document.createElement('a');
         historyLink.href = link;
         historyLink.target = '_blank';
@@ -293,11 +276,9 @@ function updateHistoryDisplay() {
         historyLink.appendChild(whatsappIcon);
         historyLink.appendChild(document.createTextNode(' ' + link));
         
-        // Actions container
         const actions = document.createElement('div');
         actions.className = 'history-actions';
         
-        // Chat button
         const chatBtn = document.createElement('a');
         chatBtn.href = link;
         chatBtn.target = '_blank';
@@ -305,14 +286,12 @@ function updateHistoryDisplay() {
         chatBtn.className = 'history-btn history-btn-chat';
         chatBtn.innerHTML = '<i class="fab fa-whatsapp" aria-hidden="true"></i><span>ابدأ الدردشة</span>';
         
-        // Lookup button
         const lookupBtn = document.createElement('button');
         lookupBtn.type = 'button';
         lookupBtn.className = 'history-btn history-btn-lookup';
         lookupBtn.innerHTML = '<i class="fas fa-search" aria-hidden="true"></i><span>استعلام</span>';
-        lookupBtn.addEventListener('click', () => lookupFromHistory(phoneNumber));
+        lookupBtn.addEventListener('click', () => lookupNumber());
         
-        // Copy button
         const copyBtn = document.createElement('button');
         copyBtn.type = 'button';
         copyBtn.className = 'history-btn history-btn-copy';
@@ -327,7 +306,6 @@ function updateHistoryDisplay() {
         li.appendChild(actions);
         fragment.appendChild(li);
         
-        // Animate first item
         if (index === 0) {
             requestAnimationFrame(() => window.historyAnimations?.addItem(li));
         }
@@ -336,7 +314,6 @@ function updateHistoryDisplay() {
     historyList.appendChild(fragment);
 }
 
-// Copy phone number
 async function copyPhoneNumber(phone) {
     const success = await copyToClipboard(phone);
     if (success) {
@@ -386,11 +363,6 @@ function lookupNumber() {
     window.toast?.info('جاري الانتقال للاستعلام... 🔍');
 }
 
-function lookupFromHistory(_phoneNumber) {
-    window.open('https://storage.googleapis.com/ksa-n/index.html', '_blank', 'noopener,noreferrer');
-    window.toast?.info('جاري الانتقال للاستعلام... 🔍');
-}
-
 /* ============================================
    🧹 CLEAR INPUT
    ============================================ */
@@ -406,6 +378,7 @@ function clearInput() {
     ], { duration: 200, easing: 'ease-out' });
     
     phoneInput.value = '';
+    phoneInput.removeAttribute('aria-invalid');
     resultContainer.innerHTML = '';
     resultContainer.classList.remove('has-result');
     errorContainer.innerHTML = '';
@@ -423,14 +396,12 @@ function clearHistory() {
     const historyList = document.getElementById('historyList');
     const items = Array.from(historyList.children);
     
-    // Animate each item out with stagger
     items.forEach((item, i) => {
         item.style.transition = `all 0.3s ease ${i * 0.05}s`;
         item.style.opacity = '0';
         item.style.transform = 'translateX(50px) scale(0.95)';
     });
     
-    // After animation completes, clear data
     setTimeout(() => {
         AppState.linkHistory = [];
         updateHistoryDisplay();
@@ -440,13 +411,12 @@ function clearHistory() {
 }
 
 /* ============================================
-   💾 LOCAL STORAGE — with error handling
+   💾 LOCAL STORAGE
    ============================================ */
 function saveHistoryToStorage() {
     try {
         localStorage.setItem('whatsapp_link_history', JSON.stringify(AppState.linkHistory));
     } catch (e) {
-        // Storage might be full or disabled
         console.warn('localStorage save failed:', e);
     }
 }
@@ -456,7 +426,6 @@ function loadHistoryFromStorage() {
         const saved = localStorage.getItem('whatsapp_link_history');
         if (saved) {
             const parsed = JSON.parse(saved);
-            // Validate: must be array of strings starting with https://wa.me/
             if (Array.isArray(parsed) && parsed.every(l => typeof l === 'string' && l.startsWith('https://wa.me/'))) {
                 AppState.linkHistory = parsed.slice(0, AppState.maxHistoryItems);
                 updateHistoryDisplay();
@@ -472,18 +441,15 @@ function loadHistoryFromStorage() {
    ============================================ */
 function initKeyboardShortcuts() {
     document.addEventListener('keydown', (e) => {
-        // Enter to generate (only when phone input is focused)
         if (e.key === 'Enter' && e.target.id === 'phoneNumber') {
             e.preventDefault();
             generateWhatsAppLink();
         }
         
-        // Escape to clear
         if (e.key === 'Escape') {
             clearInput();
         }
         
-        // Ctrl/Cmd + Shift + C to copy result
         if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toUpperCase() === 'C') {
             const resultLink = document.querySelector('.result-link');
             if (resultLink) {
@@ -496,54 +462,38 @@ function initKeyboardShortcuts() {
 }
 
 /* ============================================
-   🎯 INITIALIZATION — No inline onclick!
+   🎯 INITIALIZATION
    ============================================ */
 document.addEventListener('DOMContentLoaded', () => {
-    // Load saved history
     loadHistoryFromStorage();
-    
-    // Keyboard shortcuts
     initKeyboardShortcuts();
     
-    // Bind button events (replacing inline onclick)
     document.getElementById('generateBtn')?.addEventListener('click', generateWhatsAppLink);
     document.getElementById('lookupBtn')?.addEventListener('click', lookupNumber);
     document.getElementById('clearBtn')?.addEventListener('click', clearInput);
     document.getElementById('shareBtn')?.addEventListener('click', shareLink);
     document.getElementById('clearHistoryBtn')?.addEventListener('click', clearHistory);
     
-    // Focus input after animations settle
     setTimeout(() => {
         document.getElementById('phoneNumber')?.focus();
     }, 800);
     
-    // Register Service Worker (PWA)
     registerServiceWorker();
-    
-    // PWA Install Prompt
     initPWAInstall();
-    
-    // Offline Detection
     initOfflineDetection();
-    
-    // Scroll Performance — pause all animations during scroll
     initScrollOptimization();
     
-    console.log('🚀 WhatsApp Link Generator v0.4 initialized!');
+    console.log('🚀 WhatsApp Link Generator v0.5 initialized!');
 });
 
 /* ============================================
-   📲 PWA — Service Worker + Install + Offline
+   📲 PWA
    ============================================ */
-
-// Register Service Worker
 function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js')
             .then((reg) => {
                 console.log('⚙️ Service Worker registered:', reg.scope);
-                
-                // Check for updates
                 reg.addEventListener('updatefound', () => {
                     const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
@@ -557,7 +507,6 @@ function registerServiceWorker() {
     }
 }
 
-// PWA Install Prompt
 let deferredPrompt = null;
 
 function initPWAInstall() {
@@ -572,27 +521,22 @@ function initPWAInstall() {
     
     installBtn.addEventListener('click', async () => {
         if (!deferredPrompt) return;
-        
         deferredPrompt.prompt();
         const result = await deferredPrompt.userChoice;
-        
         if (result.outcome === 'accepted') {
             window.toast?.success('تم تثبيت التطبيق! 🎉');
             window.confetti?.burstFromElement(installBtn, 30);
         }
-        
         deferredPrompt = null;
         installBtn.style.display = 'none';
     });
     
-    // Hide button if already installed
     window.addEventListener('appinstalled', () => {
         installBtn.style.display = 'none';
         deferredPrompt = null;
     });
 }
 
-// Scroll Performance — freeze all animations during scroll
 function initScrollOptimization() {
     let scrollTimer;
     const html = document.documentElement;
@@ -608,16 +552,12 @@ function initScrollOptimization() {
     }, { passive: true });
 }
 
-// Offline Detection
-function initOfflineDetection() {    const banner = document.getElementById('offlineBanner');
+function initOfflineDetection() {
+    const banner = document.getElementById('offlineBanner');
     if (!banner) return;
     
     function updateStatus() {
-        if (!navigator.onLine) {
-            banner.style.display = 'flex';
-        } else {
-            banner.style.display = 'none';
-        }
+        banner.style.display = navigator.onLine ? 'none' : 'flex';
     }
     
     window.addEventListener('online', () => {
@@ -632,4 +572,3 @@ function initOfflineDetection() {    const banner = document.getElementById('off
     
     updateStatus();
 }
-/* v0.3.6 */
