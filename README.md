@@ -4,7 +4,7 @@
 
 ![WhatsApp Generator Banner](https://capsule-render.vercel.app/api?type=waving&color=25D366&height=200&section=header&text=WhatsApp%20Generator&fontSize=70&fontColor=ffffff&fontAlignY=35&desc=Falcon01%20Team&descAlignY=60&descAlign=50)
 
-[![Version](https://img.shields.io/badge/v0.4-25D366?style=for-the-badge&logo=whatsapp&label=Version)](https://github.com/F2lcon01/Generate-WhatsApp-link)
+[![Version](https://img.shields.io/badge/v0.5-25D366?style=for-the-badge&logo=whatsapp&label=Version)](https://github.com/F2lcon01/Generate-WhatsApp-link)
 [![PWA](https://img.shields.io/badge/PWA-Installable-845EC2?style=for-the-badge&logo=googlechrome)](https://f2lcon01.github.io/Generate-WhatsApp-link/)
 [![Falcon01](https://img.shields.io/badge/Falcon01-Team-00D4FF?style=for-the-badge)](https://github.com/F2lcon01)
 
@@ -34,6 +34,7 @@
 | 🔍 | **استعلام عن الرقم** | زر مباشر للاستعلام عن أي رقم سعودي |
 | ✨ | **تأثيرات بصرية** | جسيمات متحركة، كونفيتي، وتصميم زجاجي (Glassmorphism) |
 | 📱 | **متجاوب بالكامل** | يعمل على كل الشاشات من الجوال حتى 4K |
+| ♿ | **وصولية كاملة** | دعم قارئات الشاشة، التنقل بالكيبورد، وتباين ألوان WCAG AA |
 
 <br>
 
@@ -87,6 +88,21 @@
 <br>
 
 ## 📋 سجل التحديثات
+
+<details open>
+<summary><strong>v0.5</strong> — فحص شامل وتحسينات</summary>
+
+- 🔍 فحص كامل للكود (Full Audit) — 14 إصلاح
+- 🌐 تحسين SEO: إضافة `og:url`، تحسين Structured Data
+- ♿ تحسين الوصولية: `aria-required`، `aria-invalid`، حالة خطأ مرئية للحقل
+- 📱 إصلاح لوحة المفاتيح: `inputmode="tel"` يدعم إدخال `+`
+- 🔔 إصلاح تراكب الإشعارات: التنبيهات تتراص بشكل صحيح
+- 🔗 تحسين تجربة الرابط المكرر: يعرض الرابط + يتمرر للسجل
+- ⚙️ إصلاح Service Worker: سلسلة fallback صحيحة عند عدم وجود cache
+- 📦 إصلاح PWA Manifest: `start_url` محسّن
+- 🎨 تنظيف CSS: إزالة التكرارات، إضافة `100dvh` للموبايل
+- 🧹 تنظيف الكود: إزالة متغيرات غير مستخدمة
+</details>
 
 <details>
 <summary><strong>v0.4</strong> — تطبيق ويب + تعرّف ذكي</summary>
